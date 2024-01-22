@@ -1,20 +1,8 @@
-.login-form {
+.register {
     text-align: center;
 }
 
-.greet {
-    font-size: 24px;
-}
-
-.email {
-    font-size: 20px;
-}
-
-.password {
-    font-size: 20px;
-}
-
-.log-in-button {
+.register-button {
     background-color: rgb(34, 149, 42);
     border: none;
     font-size: 20px;
@@ -24,10 +12,6 @@
     cursor: pointer;
 }
 
-.log-in-button:hover {
+.register-button:hover {
     background-color: rgb(47, 120, 53);
-}
-
-.register {
-    font-size: 20px;
 }
