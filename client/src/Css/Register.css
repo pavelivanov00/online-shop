@@ -2,16 +2,37 @@
     text-align: center;
 }
 
-.register-button {
+.usernameTextbox, .emailTextbox, .passwordTextbox {
+    margin-right: 8px;
+}
+
+.registerButton {
     background-color: rgb(34, 149, 42);
     border: none;
     font-size: 20px;
     border-radius: 6px;
-    margin-top: 10px;
+    margin-top: 30px;
     padding: 8px 12px 8px 12px;
     cursor: pointer;
 }
 
-.register-button:hover {
+.registerButton:hover {
     background-color: rgb(47, 120, 53);
+}
+
+.exclamationMark {
+    background-color: rgb(249, 60, 60);
+    color: rgb(0, 0, 0);
+    font-size: 28px;
+    padding: 2px 14px 2px 14px;
+    margin-right: 2px;
+    border-radius: 24px;
+    border: none;
+}
+
+.errorStyle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
 }
