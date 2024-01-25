@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import '../Css/Register.css';
 
 class Register extends Component {
     constructor(props) {
@@ -10,15 +9,14 @@ class Register extends Component {
             email: '',
             password: '',
             confirmPassword: '',
-
             usernameError: '',
             emailError: '',
             passwordError: '',
-            passwordMatchError: '',
-
+            confirmPasswordError: '',
             isUsernameOK: false,
             isEmailOK: false,
-            isPasswordOK: false
+            isPasswordOK: false,
+            isConfirmPasswordOK: false,
         };
     }
 
@@ -48,7 +46,7 @@ class Register extends Component {
         this.setState({ email });
     };
 
-    handleEmailBlur = event => {
+    handleUsernameBlur = event => {
         const email = event.target.value;
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
@@ -95,14 +93,16 @@ class Register extends Component {
     };
 
     registerHandler = () => {
-        const { email, confirmPassword, password, isUsernameOK, isEmailOK, isPasswordOK } = this.state;
-        const passwordsMatch = (confirmPassword === password);
+        const { confirmPassword, password, isUsernameOK, isEmailOK, isPasswordOK, isConfirmPasswordOK } = this.state;
+        const passwordsMatch = confirmPassword === password;
 
-        this.setState({ passwordMatchError: passwordsMatch ? '' : 'Passwords do not match' });
+        passwordsMatch ? this.setState({ setPasswordMatchError: '' }) :
+            this.setState({ setPasswordMatchError: 'Passwords do not match' });
+        this.setState({ setIsConfirmPasswordOK: passwordsMatch });
 
-        if (!isUsernameOK || !isEmailOK || !isPasswordOK || !passwordsMatch)
+        if (!isUsernameOK || !isEmailOK || !isPasswordOK || !isConfirmPasswordOK) {
             console.log('Registration failed due to validation errors');
-        else {
+        } else {
             console.log(`Registration successful. \nEmail: ${email}`);
 
             this.registerAccount();
@@ -120,7 +120,9 @@ class Register extends Component {
                 isUsernameOK: false,
                 isEmailOK: false,
                 isPasswordOK: false,
+                isConfirmPasswordOK: false,
             })
+
         }
     };
 
@@ -138,9 +140,8 @@ class Register extends Component {
         });
     };
 
+
     render() {
-        const { username, email, password, confirmPassword, usernameError, emailError, passwordError,
-            passwordMatchError } = this.state;
         return (
             <div className='register'>
                 <p className='greet'>Fill in the information to register</p>
@@ -148,49 +149,49 @@ class Register extends Component {
                     <label htmlFor='username' className='username'>Username </label>
                     <input
                         type='text'
-                        onBlur={event => this.handleUsernameBlur(event)}
-                        onChange={event => this.handleUsernameChange(event)}
+                        onBlur={event => handleUsernameBlur(event)}
+                        onChange={event => handleUsernameChange(event)}
                         value={username}
                         id='username'
                         className='usernameTextbox'
                     />
                     {usernameError && <button className='exclamationMark'>!</button>}
-                    {usernameError && <p className='errorStyle'>{usernameError}</p>}
+                    {usernameError && <p style={{ color: 'red' }}>{usernameError}</p>}
                 </div>
                 <br />
                 <div>
                     <label htmlFor='email' className='email'>Email </label>
                     <input
                         type='text'
-                        onBlur={event => this.handleEmailBlur(event)}
-                        onChange={event => this.handleEmailChange(event)}
+                        onBlur={event => handleEmailBlur(event)}
+                        onChange={event => handleEmailChange(event)}
                         value={email}
                         id='email'
                         className='emailTextbox'
                     />
                     {emailError && <button className='exclamationMark'>!</button>}
-                    {emailError && <p className='errorStyle'>{emailError}</p>}
+                    {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
                 </div>
                 <br />
                 <div>
                     <label htmlFor='password' className='password'>Password </label>
                     <input
                         type='password'
-                        onBlur={event => this.handlePasswordBlur(event)}
-                        onChange={event => this.handlePasswordChange(event)}
+                        onBlur={event => handlePasswordBlur(event)}
+                        onChange={event => handlePasswordChange(event)}
                         value={password}
                         id='password'
                         className='passwordTextbox'
                     />
                     {(passwordError || passwordMatchError) && <button className='exclamationMark'>!</button>}
                 </div>
-                {passwordError && <p className='errorStyle'>{passwordError}</p>}
+                {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
                 <br />
                 <div>
                     <label htmlFor='confirmPassword' className='password'>Confirm Password </label>
                     <input
                         type='password'
-                        onChange={event => this.handleConfirmPasswordChange(event)}
+                        onChange={event => handleConfirmPasswordChange(event)}
                         value={confirmPassword}
                         id='confirmPassword'
                         className='passwordTextbox'
@@ -202,7 +203,7 @@ class Register extends Component {
                     <div className='errorStyle'>
                         <p>{passwordMatchError}</p>
                     </div>}
-                <button onClick={this.registerHandler} className='registerButton'>Register</button>
+                <button onClick={RegisterHandler} className='registerButton'>Register</button>
             </div>
         );
     }
