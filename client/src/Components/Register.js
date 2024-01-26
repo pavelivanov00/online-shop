@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+
 import '../Css/Register.css';
 
 class Register extends Component {
@@ -18,7 +20,9 @@ class Register extends Component {
 
             isUsernameOK: false,
             isEmailOK: false,
-            isPasswordOK: false
+            isPasswordOK: false,
+
+            isRegistrationSuccessful: false
         };
     }
 
@@ -120,11 +124,13 @@ class Register extends Component {
                 isUsernameOK: false,
                 isEmailOK: false,
                 isPasswordOK: false,
+
+                isRegistrationSuccessful: true
             })
         }
     };
 
-    registerAccount = () => {
+    registerAccount = async () => {
         const { username, email, password } = this.state;
 
         axios.post('http://localhost:5000/register', {
@@ -140,7 +146,7 @@ class Register extends Component {
 
     render() {
         const { username, email, password, confirmPassword, usernameError, emailError, passwordError,
-            passwordMatchError } = this.state;
+            passwordMatchError, isRegistrationSuccessful } = this.state;
         return (
             <div className='register'>
                 <p className='greet'>Fill in the information to register</p>
@@ -203,6 +209,11 @@ class Register extends Component {
                         <p>{passwordMatchError}</p>
                     </div>}
                 <button onClick={this.registerHandler} className='registerButton'>Register</button>
+
+                {isRegistrationSuccessful && <p className='registrationSuccessful'>
+                    {'The registration was successful. You can now '}
+                    <NavLink to='/'> {'log in here.'} </NavLink>
+                </p>}
             </div>
         );
     }
