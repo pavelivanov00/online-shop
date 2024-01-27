@@ -1,13 +1,32 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import '../Css/Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successfulLogin, setSuccessfulLogin] = useState();
+  const [response, setResponse] = useState({});
 
-  const loginHandler = () => {
-    console.log(`email: ${email}\n password: ${password}`); 
+  const loginHandler = async () => {
+    try {
+      const result = await axios.post('http://localhost:5000/login', {
+        email,
+        password
+      });
+      setResponse(result);
+
+      if (result.data === 'Login successful') {
+        setSuccessfulLogin(true);
+      }
+      else {
+        setSuccessfulLogin(false);
+      }
+    }
+    catch (error) {
+      console.error('Error during registration:', error);
+    }
   }
 
   return (
@@ -24,10 +43,19 @@ const Login = () => {
       </div>
       <br />
       <button onClick={loginHandler} className='log-in-button'>Log in</button>
+
+      <div>
+        {successfulLogin ? (
+          <p>{response.data}</p>
+        ) : (
+          <p className="invalidCredentials">{response.data}</p>
+        )}
+      </div>
+
       <p className='register'>
         {"Don't have an account? "}
         <NavLink
-          to="register"
+          to='register'
           className='create-account-link'
         >
           {'Create one here.'}

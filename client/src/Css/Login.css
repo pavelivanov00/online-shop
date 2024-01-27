@@ -31,3 +31,8 @@
 .register {
     font-size: 20px;
 }
+
+.invalidCredentials {
+    font-size: 24px;
+    color: red;
+}

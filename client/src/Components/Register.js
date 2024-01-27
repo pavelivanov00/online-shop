@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-
 import '../Css/Register.css';
 
 class Register extends Component {
@@ -22,6 +21,8 @@ class Register extends Component {
             isEmailOK: false,
             isPasswordOK: false,
 
+            serverResponse: '',
+            isEmailTaken: false,
             isRegistrationSuccessful: false
         };
     }
@@ -98,8 +99,9 @@ class Register extends Component {
         this.setState({ confirmPassword });
     };
 
-    registerHandler = () => {
-        const { email, confirmPassword, password, isUsernameOK, isEmailOK, isPasswordOK } = this.state;
+
+    registerHandler = async () => {
+        const { confirmPassword, password, isUsernameOK, isEmailOK, isPasswordOK } = this.state;
         const passwordsMatch = (confirmPassword === password);
 
         this.setState({ passwordMatchError: passwordsMatch ? '' : 'Passwords do not match' });
@@ -107,46 +109,57 @@ class Register extends Component {
         if (!isUsernameOK || !isEmailOK || !isPasswordOK || !passwordsMatch)
             console.log('Registration failed due to validation errors');
         else {
-            console.log(`Registration successful. \nEmail: ${email}`);
+            try {
+                const serverResponse = await this.registerAccount();
+                if (serverResponse === 'An account has already been registered with this email') {
+                    this.setState({
+                        serverResponse: serverResponse,
+                        isRegistrationSuccessful: false,
+                        isEmailTaken: true
+                    });
+                }
+                else {
+                    console.log(serverResponse);
+                    this.setState({
+                        username: '',
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
 
-            this.registerAccount();
-            this.setState({
-                username: '',
-                email: '',
-                password: '',
-                confirmPassword: '',
+                        usernameError: '',
+                        emailError: '',
+                        passwordError: '',
+                        confirmPasswordError: '',
 
-                usernameError: '',
-                emailError: '',
-                passwordError: '',
-                confirmPasswordError: '',
+                        isUsernameOK: false,
+                        isEmailOK: false,
+                        isPasswordOK: false,
 
-                isUsernameOK: false,
-                isEmailOK: false,
-                isPasswordOK: false,
-
-                isRegistrationSuccessful: true
-            })
+                        serverResponse: serverResponse,
+                        isEmailTaken: false,
+                        isRegistrationSuccessful: true
+                    })
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+            }
         }
     };
 
     registerAccount = async () => {
         const { username, email, password } = this.state;
 
-        axios.post('http://localhost:5000/register', {
+        const response = await axios.post('http://localhost:5000/register', {
             username,
             email,
             password
-        }).then(response => {
-            console.log('Registration successful:', response.data);
-        }).catch(error => {
-            console.error('Error while registering:', error);
         });
+        return response.data;
     };
 
     render() {
         const { username, email, password, confirmPassword, usernameError, emailError, passwordError,
-            passwordMatchError, isRegistrationSuccessful } = this.state;
+            passwordMatchError, isRegistrationSuccessful, isEmailTaken, serverResponse } = this.state;
         return (
             <div className='register'>
                 <p className='greet'>Fill in the information to register</p>
@@ -174,7 +187,7 @@ class Register extends Component {
                         id='email'
                         className='emailTextbox'
                     />
-                    {emailError && <button className='exclamationMark'>!</button>}
+                    {(emailError || isEmailTaken)  && <button className='exclamationMark'>!</button>}
                     {emailError && <p className='errorStyle'>{emailError}</p>}
                 </div>
                 <br />
@@ -210,8 +223,9 @@ class Register extends Component {
                     </div>}
                 <button onClick={this.registerHandler} className='registerButton'>Register</button>
 
+                <p>{serverResponse}</p>
                 {isRegistrationSuccessful && <p className='registrationSuccessful'>
-                    {'The registration was successful. You can now '}
+                    {'You can now '}
                     <NavLink to='/'> {'log in here.'} </NavLink>
                 </p>}
             </div>

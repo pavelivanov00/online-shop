@@ -1,6 +1,7 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const app = express();
@@ -23,29 +24,65 @@ MongoClient.connect(MONGO_URI)
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
+    const saltRounds = 10;
     try {
+        const hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.hash(password, saltRounds, (err, hash) => {
+                if (err) reject(err);
+                else resolve(hash);
+            });
+        });
+
         const existingEmail = await db.collection('accounts').findOne({
-            email: email
+            ['account.email']: email
         });
 
         if (existingEmail) {
-            console.log('An account has been registered already with this email')
-
-            res.json(existingTask);
+            const result = 'An account has already been registered with this email';
+            res.json(result);
         } else {
             const account = {
                 username,
                 email,
-                password
+                hashedPassword
             };
+            await db.collection('accounts').insertOne({ account });
 
-            const newTask = await db.collection('accounts').insertOne({ account });
-
-            res.json('Registration successful');
+            const result = 'Registration successful';
+            res.json(result);
         }
     } catch (error) {
         console.error('Error while creating account', error);
         res.status(500).json({ error: 'Error while creating account' });
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const query = await db.collection('accounts').findOne({
+            ['account.email']: email
+        });
+
+        if (!query) {
+            return res.json('Invalid credentials');
+        }
+        bcrypt.compare(password, query.account.hashedPassword, (err, result) => {
+            if (err) {
+                console.error('Error comparing passwords:', err);
+                return res.status(500).json({ error: 'Internal server error' });
+            }
+
+            if (result) {
+                return res.json('Login successful');
+            } else {
+                return res.json('Invalid credentials');
+            }
+        });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
