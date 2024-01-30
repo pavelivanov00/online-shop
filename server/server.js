@@ -75,7 +75,12 @@ app.post('/login', async (req, res) => {
             }
 
             if (result) {
-                return res.json('Login successful');
+                return res.json({
+                        status:'Login successful', 
+                        username: query.account.username,
+                        email: query.account.email,
+                        accountRole: query.account.role
+                });
             } else {
                 return res.json('Invalid credentials');
             }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../Css/Login.css';
 
 const Login = () => {
@@ -8,6 +8,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [successfulLogin, setSuccessfulLogin] = useState();
   const [response, setResponse] = useState({});
+
+  const navigate = useNavigate();
 
   const loginHandler = async () => {
     try {
@@ -17,8 +19,15 @@ const Login = () => {
       });
       setResponse(result);
 
-      if (result.data === 'Login successful') {
+      if (result.data.status === 'Login successful') {
         setSuccessfulLogin(true);
+        navigate('home', {
+          state: {
+            email: result.data.email,
+            username: result.data.username,
+            accountRole: result.data.accountRole
+          },
+        });
       }
       else {
         setSuccessfulLogin(false);
@@ -46,9 +55,9 @@ const Login = () => {
 
       <div>
         {successfulLogin ? (
-          <p>{response.data}</p>
+          <p>{response.data && response.data.status}</p>
         ) : (
-          <p className="invalidCredentials">{response.data}</p>
+          <p className="invalidCredentials">{response.data && response.data.status}</p>
         )}
       </div>
 
