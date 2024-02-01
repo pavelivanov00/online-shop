@@ -152,7 +152,8 @@ class Register extends Component {
         const response = await axios.post('http://localhost:5000/register', {
             username,
             email,
-            password
+            password,
+            role: 'customer'
         });
         return response.data;
     };

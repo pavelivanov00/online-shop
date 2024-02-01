@@ -22,7 +22,7 @@ MongoClient.connect(MONGO_URI)
     .catch((error) => console.error('Error connecting to MongoDB:', error));
 
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     const saltRounds = 10;
     try {
@@ -41,10 +41,13 @@ app.post('/register', async (req, res) => {
             const result = 'An account has already been registered with this email';
             res.json(result);
         } else {
+            const registerDate = new Date();
             const account = {
                 username,
                 email,
-                hashedPassword
+                hashedPassword,
+                role,
+                registerDate
             };
             await db.collection('accounts').insertOne({ account });
 
@@ -76,10 +79,10 @@ app.post('/login', async (req, res) => {
 
             if (result) {
                 return res.json({
-                        status:'Login successful', 
-                        username: query.account.username,
-                        email: query.account.email,
-                        accountRole: query.account.role
+                    status: 'Login successful',
+                    username: query.account.username,
+                    email: query.account.email,
+                    role: query.account.role
                 });
             } else {
                 return res.json('Invalid credentials');
@@ -88,6 +91,16 @@ app.post('/login', async (req, res) => {
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/home/getaccounts', async (req, res) => {
+    try {
+        const accounts = await db.collection('accounts').find({}, { projection: { 'account.email': 1, _id: 0 } }).toArray();
+        const emails = accounts.map(account => account.account.email);
+        res.json(emails);
+    } catch (error) {
+        res.status(500).json({ error: 'Error while querying accounts' });
     }
 });
 

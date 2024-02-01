@@ -3,10 +3,10 @@ import Home from './Home';
 import { useLocation } from 'react-router-dom';
 
 function HomeProps() {
-  const { accountRole, email, username } = useLocation().state;
+  const { role, email, username } = useLocation().state;
   return (
     <Home
-      accountRole={accountRole}
+      role={role}
       email={email}
       username={username}
     />

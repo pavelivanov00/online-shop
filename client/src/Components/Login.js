@@ -25,7 +25,7 @@ const Login = () => {
           state: {
             email: result.data.email,
             username: result.data.username,
-            accountRole: result.data.accountRole
+            role: result.data.role
           },
         });
       }
