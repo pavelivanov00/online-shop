@@ -96,9 +96,10 @@ app.post('/login', async (req, res) => {
 
 app.get('/home/getaccounts', async (req, res) => {
     try {
-        const accounts = await db.collection('accounts').find({}, { projection: { 'account.email': 1, _id: 0 } }).toArray();
-        const emails = accounts.map(account => account.account.email);
-        res.json(emails);
+        const accounts = await db.collection('accounts').find({}, { projection: { 'account.email': 1, 'account.role': 1, _id: 0 } }).toArray();
+        const result = accounts.map(account => ({ email: account.account.email, role: account.account.role }));
+        console.log(result);
+        res.json(result);
     } catch (error) {
         res.status(500).json({ error: 'Error while querying accounts' });
     }

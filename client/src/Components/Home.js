@@ -11,19 +11,26 @@ class Home extends Component {
             username: this.props.username,
             email: this.props.email,
             accountList: [],
+            roleList: [],
+            areAccountToggled: false
         }
     }
     getAccounts = async () => {
         try {
             const result = await axios.get('http://localhost:5000/home/getaccounts');
-            this.setState({ accountList: result.data });
+            const accountList = result.data.map(account => account.email);
+            const roleList = result.data.map(account => account.role);
+            this.setState({
+                accountList,
+                roleList
+            });
         } catch (error) {
             console.error('Error during querying accounts:', error);
         }
     }
 
     render() {
-        const { role, email, username, accountList } = this.state
+        const { role, email, username, accountList, roleList, areAccountToggled } = this.state
         return (
             <div>
                 <div className='userInfo'>
@@ -35,16 +42,33 @@ class Home extends Component {
                     <div className='dashboard'>
                         <button className='dashboardButton'>View items</button>
                         <br />
-                        <button className='dashboardButton' onClick={this.getAccounts}>Change roles</button>
+                        <button
+                            className='dashboardButton'
+                            onClick={() => {
+                                this.getAccounts();
+                                this.setState({ areAccountToggled: true });
+                            }}>
+                            Change roles
+                        </button>
                     </div>
                 }
                 {(accountList && role === 'administrator') &&
-                    accountList.map((account, index) => (
-                        <div className='accounts' key={index}>
-                            <p key={index}>{account}</p>
-                            <button className='deleteButton'>X</button>
-                        </div>
-                    ))
+                    <div>
+                        {accountList.map((account, index) => (
+                            <div className='accounts' key={index}>
+                                <p key={index}>{account}</p>
+                                <select defaultValue={roleList[index]} className='selectRoleElement'>
+                                    <option>customer</option>
+                                    <option>manager</option>
+                                    <option>administrator</option>
+                                </select>
+                                <button className='deleteButton'>X</button>
+                            </div>
+                        ))}
+                        {areAccountToggled && <div className='center'>
+                            <button className='saveButton'>Save</button>
+                        </div>}
+                    </div>
                 }
             </div>
         )

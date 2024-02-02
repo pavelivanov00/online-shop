@@ -1,47 +1,66 @@
 .userInfo {
-    text-align: center;
-    font-size: 120%;
+  text-align: center;
+  font-size: 120%;
 }
+
 .dashboard {
-    align-items: center;
-    text-align: center;
+  align-items: center;
+  text-align: center;
 }
 
 .dashboardButton {
-    width: 11%;
-    margin: 0.5%;
-    color: rgb(255, 255, 255);
-    background-color: rgb(99, 91, 91);
-    border: none;
-    border-radius: 0.7vmax;
-    font-size: 120%;
-    padding: 0.4% 0.8% 0.4% 0.8%;
+  width: 11%;
+  margin: 0.5%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(99, 91, 91);
+  border: none;
+  border-radius: 0.7vmax;
+  font-size: 120%;
+  padding: 0.4% 0.8% 0.4% 0.8%;
 }
 
-.dashboardButton:hover {
-    background-color: rgb(67, 61, 61);
+.dashboardButton:hover, .saveButton:hover {
+  background-color: rgb(67, 61, 61);
 }
 
 .accounts {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto; 
-    font-size: 120%;
-    text-align: center;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 120%;
+  text-align: center;
+}
+
+.selectRoleElement {
+  margin-left: 1%;
+}
 
 .deleteButton {
-    background-color: rgb(129, 25, 25);
-    color: rgba(237, 221, 221, 0.989);
-    border: none;
-    border-radius: 50%;
-    padding: 6px 9px 4px 8px;
-    margin-left: 15px;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
-  .deleteButton:hover {
-    background-color: rgb(51, 13, 13);
-  }
+  background-color: rgb(129, 25, 25);
+  color: rgba(237, 221, 221, 0.989);
+  border: none;
+  border-radius: 50%;
+  padding: 6px 9px 4px 8px;
+  margin-left: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background-color: rgb(51, 13, 13);
+}
+
+.saveButton {
+  width: 6%;
+  margin: 0.5%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(99, 91, 91);
+  border: none;
+  border-radius: 0.7vmax;
+  font-size: 120%;
+  padding: 0.4% 0.8% 0.4% 0.8%;
+}
+.center {
+  text-align: center;
+}
