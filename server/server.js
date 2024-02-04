@@ -12,6 +12,8 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: false }));
+
 var db;
 
 MongoClient.connect(MONGO_URI)
@@ -98,10 +100,45 @@ app.get('/home/getaccounts', async (req, res) => {
     try {
         const accounts = await db.collection('accounts').find({}, { projection: { 'account.email': 1, 'account.role': 1, _id: 0 } }).toArray();
         const result = accounts.map(account => ({ email: account.account.email, role: account.account.role }));
-        console.log(result);
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: 'Error while querying accounts' });
+    }
+});
+
+app.post('/home/updateaccounts', async (req, res) => {
+    try {
+        const { updatedAccounts, accountsToBeDeleted } = req.body;
+
+        if (Object.keys(updatedAccounts).length === 0 && accountsToBeDeleted.length === 0) {
+            return res.json('Nothing to update.');
+        }
+
+        const updateOperations = Object.entries(updatedAccounts).map(([email, newRole]) => ({
+            updateOne: {
+                filter: { 'account.email': email },
+                update: { $set: { 'account.role': newRole } }
+            }
+        }));
+
+        const deleteOperations = accountsToBeDeleted.map(email => ({
+            deleteOne: {
+                filter: { 'account.email': email }
+            }
+        }));
+
+        const operations = [...updateOperations, ...deleteOperations];
+
+        const result = await db.collection('accounts').bulkWrite(operations);
+
+        if (result.modifiedCount > 0 || result.deletedCount > 0) {
+            res.json('Operation successful.');
+        } else {
+            res.json('No documents changed.');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Server error.' });
     }
 });
 

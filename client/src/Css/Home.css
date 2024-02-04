@@ -64,3 +64,15 @@
 .center {
   text-align: center;
 }
+
+.successfulUpdate {
+  text-align: center;
+  color: green;
+  font-size: 130%;
+}
+
+.updateError {
+  text-align: center;
+  color: rgb(150, 0, 0);
+  font-size: 130%;
+}
