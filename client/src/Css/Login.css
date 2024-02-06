@@ -1,31 +1,30 @@
-.login-form {
+.loginForm {
     text-align: center;
+    min-width: 1000px;
 }
 
 .greet {
-    font-size: 24px;
+    font-size: 150%;
 }
 
-.email {
-    font-size: 20px;
-}
-
+.email,
 .password {
-    font-size: 20px;
+    font-size: 130%;
 }
 
-.log-in-button {
-    background-color: rgb(34, 149, 42);
+.loginButton {
+    margin: 0.5%;
+    color: rgb(255, 255, 255);
+    background-color: rgb(80, 80, 80);
     border: none;
-    font-size: 20px;
-    border-radius: 6px;
-    margin-top: 10px;
-    padding: 8px 12px 8px 12px;
+    border-radius: 0.7vmax;
+    font-size: 120%;
+    padding: 0.4% 1% 0.4% 1%;
     cursor: pointer;
 }
 
-.log-in-button:hover {
-    background-color: rgb(47, 120, 53);
+.loginButton:hover {
+    background-color: rgb(58, 58, 58);
 }
 
 .register {

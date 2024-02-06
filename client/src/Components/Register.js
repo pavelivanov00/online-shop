@@ -163,9 +163,9 @@ class Register extends Component {
             passwordMatchError, isRegistrationSuccessful, isEmailTaken, serverResponse } = this.state;
         return (
             <div className='register'>
-                <p className='greet'>Fill in the information to register</p>
+                <p className='info'>Fill in the information to register</p>
                 <div>
-                    <label htmlFor='username' className='username'>Username </label>
+                    <label htmlFor='username' className='usernameRegister'>Username </label>
                     <input
                         type='text'
                         onBlur={event => this.handleUsernameBlur(event)}
@@ -179,7 +179,7 @@ class Register extends Component {
                 </div>
                 <br />
                 <div>
-                    <label htmlFor='email' className='email'>Email </label>
+                    <label htmlFor='email' className='emailRegister'>Email </label>
                     <input
                         type='text'
                         onBlur={event => this.handleEmailBlur(event)}
@@ -193,7 +193,7 @@ class Register extends Component {
                 </div>
                 <br />
                 <div>
-                    <label htmlFor='password' className='password'>Password </label>
+                    <label htmlFor='password' className='passwordRegister'>Password </label>
                     <input
                         type='password'
                         onBlur={event => this.handlePasswordBlur(event)}
@@ -207,7 +207,7 @@ class Register extends Component {
                 {passwordError && <p className='errorStyle'>{passwordError}</p>}
                 <br />
                 <div>
-                    <label htmlFor='confirmPassword' className='password'>Confirm Password </label>
+                    <label htmlFor='confirmPassword' className='passwordRegister'>Confirm Password </label>
                     <input
                         type='password'
                         onChange={event => this.handleConfirmPasswordChange(event)}

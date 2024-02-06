@@ -1,23 +1,35 @@
 .register {
     text-align: center;
+    min-width: 1000px;
 }
 
-.usernameTextbox, .emailTextbox, .passwordTextbox {
-    margin-right: 8px;
+.info {
+    font-size: 130%;
+}
+.usernameRegister,
+.emailRegister,
+.passwordRegister {
+    font-size: 110%;
+}
+.usernameTextbox,
+.emailTextbox,
+.passwordTextbox {
+    margin-right: 1%;
 }
 
 .registerButton {
-    background-color: rgb(34, 149, 42);
+    margin-top: 3%;
+    color: rgb(255, 255, 255);
+    background-color: rgb(80, 80, 80);
     border: none;
-    font-size: 20px;
-    border-radius: 6px;
-    margin-top: 30px;
-    padding: 8px 12px 8px 12px;
+    border-radius: 0.7vmax;
+    font-size: 110%;
+    padding: 0.4% 1.3% 0.4% 1.3%;
     cursor: pointer;
 }
 
 .registerButton:hover {
-    background-color: rgb(47, 120, 53);
+    background-color: rgb(58, 58, 58);
 }
 
 .exclamationMark {
@@ -36,4 +48,3 @@
     align-items: center;
     color: red;
 }
-

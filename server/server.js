@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/home/getaccounts', async (req, res) => {
+app.get('/home/getAccounts', async (req, res) => {
     try {
         const accounts = await db.collection('accounts').find({}, { projection: { 'account.email': 1, 'account.role': 1, _id: 0 } }).toArray();
         const result = accounts.map(account => ({ email: account.account.email, role: account.account.role }));
@@ -106,7 +106,7 @@ app.get('/home/getaccounts', async (req, res) => {
     }
 });
 
-app.post('/home/updateaccounts', async (req, res) => {
+app.post('/home/updateAccounts', async (req, res) => {
     try {
         const { updatedAccounts, accountsToBeDeleted } = req.body;
 

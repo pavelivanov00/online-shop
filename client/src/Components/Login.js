@@ -39,7 +39,7 @@ const Login = () => {
   }
 
   return (
-    <div className='login-form'>
+    <div className='loginForm'>
       <p className='greet'>Hello please log in</p>
       <div>
         <label htmlFor='email' className='email'>Email </label>
@@ -51,7 +51,7 @@ const Login = () => {
         <input type='password' onChange={event => setPassword(event.target.value)} id='password'></input>
       </div>
       <br />
-      <button onClick={loginHandler} className='log-in-button'>Log in</button>
+      <button onClick={loginHandler} className='loginButton'>Log in</button>
 
       <div>
         {successfulLogin ? (

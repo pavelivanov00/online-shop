@@ -1,3 +1,7 @@
+.mainContainer {
+  min-width: 1000px;
+}
+
 .userInfo {
   text-align: center;
   font-size: 120%;
@@ -9,18 +13,20 @@
 }
 
 .dashboardButton {
-  width: 11%;
   margin: 0.5%;
   color: rgb(255, 255, 255);
-  background-color: rgb(99, 91, 91);
+  background-color: rgb(80, 80, 80);
   border: none;
   border-radius: 0.7vmax;
   font-size: 120%;
-  padding: 0.4% 0.8% 0.4% 0.8%;
+  padding: 0.4% 1% 0.4% 1%;
+  cursor: pointer;
 }
 
-.dashboardButton:hover, .saveButton:hover {
-  background-color: rgb(67, 61, 61);
+.dashboardButton:hover,
+.saveButton:hover,
+.logoutButton:hover {
+  background-color: rgb(58, 58, 58);
 }
 
 .accounts {
@@ -51,16 +57,21 @@
   background-color: rgb(51, 13, 13);
 }
 
-.saveButton {
-  width: 6%;
-  margin: 0.5%;
+.saveButton,
+.logoutButton {
+  margin-top: 2.5%;
   color: rgb(255, 255, 255);
-  background-color: rgb(99, 91, 91);
+  background-color: rgb(80, 80, 80);
   border: none;
   border-radius: 0.7vmax;
   font-size: 120%;
-  padding: 0.4% 0.8% 0.4% 0.8%;
+  padding: 0.4% 1% 0.4% 1%;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-family: Arial, sans-serif;
 }
+
 .center {
   text-align: center;
 }

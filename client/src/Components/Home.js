@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import '../Css/Home.css';
 
 class Home extends Component {
@@ -20,7 +22,7 @@ class Home extends Component {
     }
     getAccounts = async () => {
         try {
-            const result = await axios.get('http://localhost:5000/home/getaccounts');
+            const result = await axios.get('http://localhost:5000/home/getAccounts');
             const accountList = result.data.map(account => account.email);
             const roleList = result.data.map(account => account.role);
             this.setState({
@@ -70,7 +72,7 @@ class Home extends Component {
         console.log(accountsToBeDeleted);
         console.log(updatedAccounts);
 
-        const response = await axios.post('http://localhost:5000/home/updateaccounts', {
+        const response = await axios.post('http://localhost:5000/home/updateAccounts', {
             updatedAccounts,
             accountsToBeDeleted
         });
@@ -84,7 +86,7 @@ class Home extends Component {
     render() {
         const { role, email, username, accountList, roleList, areAccountsToggled, serverResponse } = this.state
         return (
-            <div>
+            <div className='mainContainer'>
                 <div className='userInfo'>
                     <p>username: {username}</p>
                     <p>email: {email}</p>
@@ -131,11 +133,14 @@ class Home extends Component {
                         </div>}
                     </div>
                 }
-                {serverResponse &&
+                {serverResponse && areAccountsToggled &&
                     <div className={serverResponse === 'Operation successful.' ? 'successfulUpdate' : 'updateError'}>
                         {serverResponse}
                     </div>
                 }
+                <div className='center'>
+                    <Link to="/" className="logoutButton">Log out</Link>
+                </div>
             </div>
         )
     }
