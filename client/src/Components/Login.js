@@ -61,7 +61,7 @@ const Login = () => {
         )}
       </div>
 
-      <p className='register'>
+      <p className='registerHere'>
         {"Don't have an account? "}
         <NavLink
           to='register'

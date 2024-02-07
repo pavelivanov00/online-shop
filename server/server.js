@@ -142,6 +142,40 @@ app.post('/home/updateAccounts', async (req, res) => {
     }
 });
 
+app.post('/home/saveItem', async (req, res) => {
+    const { item } = req.body;
+    const title = item.title;
+    const tag = item.tag;
+    const quantity = item.quantity;
+    const price = item.price;
+    const description = item.description;
+
+    try {
+        const existingItem = await db.collection('items').findOne({
+            title: title
+        });
+
+        if (existingItem) {
+            const result = 'This item is already listed';
+            res.json(result);
+        } else {
+            const item = {
+                title,
+                tag,
+                quantity,
+                price,
+                description
+            };
+            await db.collection('items').insertOne({ item });
+
+            res.json('The item was listed.');
+        }
+    } catch (error) {
+        console.error('Error while listing item', error);
+        res.status(500).json({ error: 'Error while listing item' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

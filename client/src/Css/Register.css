@@ -9,7 +9,7 @@
 .usernameRegister,
 .emailRegister,
 .passwordRegister {
-    font-size: 110%;
+    font-size: 130%;
 }
 .usernameTextbox,
 .emailTextbox,
@@ -23,7 +23,7 @@
     background-color: rgb(80, 80, 80);
     border: none;
     border-radius: 0.7vmax;
-    font-size: 110%;
+    font-size: 120%;
     padding: 0.4% 1.3% 0.4% 1.3%;
     cursor: pointer;
 }

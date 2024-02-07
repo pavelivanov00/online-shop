@@ -76,14 +76,62 @@
   text-align: center;
 }
 
-.successfulUpdate {
+.successfulUpdate,
+.successfulItemList {
   text-align: center;
   color: green;
   font-size: 130%;
+  padding-top: 2%;
 }
 
-.updateError {
+.updateError,
+.itemListError {
   text-align: center;
   color: rgb(150, 0, 0);
   font-size: 130%;
+  padding-top: 2%;
+}
+
+.listItemMenu {
+  text-align: center;
+}
+
+.marginBottom {
+  margin-bottom: 2%;
+}
+
+.title,
+.quantity,
+.tag,
+.price,
+.description {
+  font-size: 120%;
+}
+
+.titleTextbox,
+.quantityTextbox,
+.tagSelect,
+.priceTextbox,
+.descriptionTextarea {
+  margin-top: 0.5%;
+  margin-left: 1%;
+  font-size: 90%;
+}
+
+.titleTextbox {
+  width: 200px;
+}
+
+.quantityTextbox,
+.priceTextbox{
+  width: 80px;
+}
+.descriptionTextarea{
+  height: 5vmax;
+  width: 260px;
+}
+
+.divDescription {
+  display: flex;
+  justify-content: center;
 }

@@ -16,8 +16,18 @@ class Home extends Component {
             roleList: [],
             areAccountsToggled: false,
             updatedAccounts: {},
-            serverResponse: '',
-            accountsToBeDeleted: []
+            serverResponseUpdateAccount: '',
+            accountsToBeDeleted: [],
+            showDashboard: true,
+            showListItemMenu: false,
+            item: {
+                title: '',
+                tag: '',
+                quantity: '',
+                price: '',
+                description: ''
+            },
+            serverResponseListItem: '',
         }
     }
     getAccounts = async () => {
@@ -30,7 +40,7 @@ class Home extends Component {
                 roleList
             });
         } catch (error) {
-            console.error('Error during querying accounts:', error);
+            console.error('Error while querying accounts:', error);
         }
     };
 
@@ -77,72 +87,229 @@ class Home extends Component {
             accountsToBeDeleted
         });
         this.setState({
-            serverResponse: response.data,
+            serverResponseUpdateAccount: response.data,
             updatedAccounts: {},
             accountsToBeDeleted: []
         });
     };
 
+    handleListItemsClick = () => {
+        this.setState({
+            showDashboard: false,
+            showListItemMenu: true
+        });
+    };
+
+    handleGoBackClick = () => {
+        this.setState({
+            showDashboard: true,
+            showListItemMenu: false
+        });
+    };
+
+    handleSaveItemClick = async () => {
+        const { item } = this.state;
+        console.log(item);
+
+        const response = await axios.post('http://localhost:5000/home/saveItem', {
+            item
+        });
+        this.setState({
+            serverResponseListItem: response.data,
+            item: {
+                title: '',
+                tag: '',
+                quantity: '',
+                price: '',
+                description: ''
+            },
+        });
+    };
+
     render() {
-        const { role, email, username, accountList, roleList, areAccountsToggled, serverResponse } = this.state
+        const { role, email, username, accountList, roleList, areAccountsToggled, serverResponseUpdateAccount,
+            showDashboard, showListItemMenu, serverResponseListItem } = this.state;
+
+        const categoryTags = [
+            'Apparel',
+            'Electronics',
+            'Home and Garden',
+            'Toys',
+            'Books',
+            'Health and Beauty',
+            'Sports and Outdoors',
+            'Food and Groceries',
+            'Automotive',
+            'Pet Supplies'
+        ];
+
         return (
             <div className='mainContainer'>
-                <div className='userInfo'>
-                    <p>username: {username}</p>
-                    <p>email: {email}</p>
-                    <p>account role: {role}</p>
-                </div>
-                {(role === 'administrator') &&
-                    <div className='dashboard'>
-                        <button className='dashboardButton'>View items</button>
-                        <br />
-                        <button
-                            className='dashboardButton'
-                            onClick={() => {
-                                this.getAccounts();
-                                this.setState(prevState => ({ areAccountsToggled: !prevState.areAccountsToggled }));
-                            }}>
-                            Change roles
-                        </button>
-                    </div>
-                }
-                {(areAccountsToggled && role === 'administrator') &&
+                {showDashboard &&
                     <div>
-                        {accountList.map((account, index) => (
-                            <div className='accounts' key={index}>
-                                <p key={index}>{account}</p>
-                                <select
-                                    defaultValue={roleList[index]}
-                                    className='selectRoleElement'
-                                    onChange={event => this.handleRoleChange(index, event)}
-                                >
-                                    <option>customer</option>
-                                    <option>manager</option>
-                                    <option>administrator</option>
-                                </select>
-                                <button
-                                    className='deleteButton'
-                                    onClick={() => this.handleDeleteButtonClick(index)}
-                                >
-                                    X
-                                </button>
+                        <div className='userInfo'>
+                            <p>username: {username}</p>
+                            <p>email: {email}</p>
+                            <p>account role: {role}</p>
+                        </div>
+                        {(role === 'administrator' || role === 'manager') &&
+                            <div className='dashboard'>
+                                <button className='dashboardButton'>View items</button>
+                                <br />
+                                <button className='dashboardButton' onClick={this.handleListItemsClick}>List items</button>
+                                <br />
+                                {role === 'administrator' &&
+                                    <button
+                                        className='dashboardButton'
+                                        onClick={() => {
+                                            this.getAccounts();
+                                            this.setState(prevState => ({ areAccountsToggled: !prevState.areAccountsToggled }));
+                                        }}>
+                                        Change roles
+                                    </button>
+                                }
                             </div>
-                        ))}
-                        {areAccountsToggled && <div className='center'>
-                            <button className='saveButton' onClick={this.handleSaveButtonClick}>Save</button>
-                        </div>}
+                        }
+                        {(areAccountsToggled && role === 'administrator') &&
+                            <div>
+                                {accountList.map((account, index) => (
+                                    <div className='accounts' key={index}>
+                                        <p key={index}>{account}</p>
+                                        <select
+                                            defaultValue={roleList[index]}
+                                            className='selectRoleElement'
+                                            onChange={event => this.handleRoleChange(index, event)}
+                                        >
+                                            <option>customer</option>
+                                            <option>manager</option>
+                                            <option>administrator</option>
+                                        </select>
+                                        <button
+                                            className='deleteButton'
+                                            onClick={() => this.handleDeleteButtonClick(index)}
+                                        >
+                                            X
+                                        </button>
+                                    </div>
+                                ))}
+                                {areAccountsToggled &&
+                                    <div className='center'>
+                                        <button className='saveButton' onClick={this.handleSaveButtonClick}>Save</button>
+                                    </div>}
+                            </div>
+                        }
+                        {serverResponseUpdateAccount && areAccountsToggled &&
+                            <div className={serverResponseUpdateAccount === 'Operation successful.' ? 'successfulUpdate' : 'updateError'}>
+                                {serverResponseUpdateAccount}
+                            </div>
+                        }
+                        {(role === 'administrator' || role === 'manager') &&
+                            <div className='center'>
+                                <Link to="/" className="logoutButton">Log out</Link>
+                            </div>
+                        }
                     </div>
                 }
-                {serverResponse && areAccountsToggled &&
-                    <div className={serverResponse === 'Operation successful.' ? 'successfulUpdate' : 'updateError'}>
-                        {serverResponse}
+                {showListItemMenu &&
+                    <div className='listItemMenu'>
+                        <button className='dashboardButton marginBottom' onClick={this.handleGoBackClick}>Go back</button>
+                        <br />
+                        <div>
+                            <label htmlFor='title' className='title'>Title</label>
+                            <input
+                                type='text'
+                                // onBlur={event => this.handleTitleBlur(event)}
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        title: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.title}
+                                id='title'
+                                className='titleTextbox'
+                            />
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor='tag' className='tag'>Tag</label>
+                            <select
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        tag: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.tag}
+                                id='tag'
+                                className='tagSelect'
+                            >
+                                {categoryTags.map(tag => (
+                                    <option key={tag} value={tag}>{tag}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor='quantity' className='quantity'>Quantity</label>
+                            <input
+                                type='text'
+                                // onBlur={event => this.handleQuantityBlur(event)}
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        quantity: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.quantity}
+                                id='quantity'
+                                className='quantityTextbox'
+                            />
+                        </div>
+                        <br />
+                        <div>
+                            <label htmlFor='price' className='price'>Price</label>
+                            <input
+                                type='text'
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        price: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.price}
+                                id='price'
+                                className='priceTextbox'
+                            />
+                        </div>
+                        <br />
+                        <div className='divDescription'>
+                            <label htmlFor='description' className='description'>Description</label>
+                            <textarea
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        description: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.description}
+                                id='description'
+                                className='descriptionTextarea'
+                            />
+                        </div>
+                        <div className='center'>
+                            <button className='saveButton' onClick={this.handleSaveItemClick}>Save Item</button>
+                        </div>
+                        {serverResponseListItem &&
+                            <div className={serverResponseListItem === 'The item was listed.' ? 'successfulItemList' : 'itemListError'}>
+                                {serverResponseListItem}
+                            </div>
+                        }
                     </div>
                 }
-                <div className='center'>
-                    <Link to="/" className="logoutButton">Log out</Link>
-                </div>
             </div>
         )
+
     }
 }
 
