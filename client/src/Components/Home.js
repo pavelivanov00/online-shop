@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import ListAnItem from './ListAnItem';
 import '../Css/Home.css';
 
 class Home extends Component {
@@ -18,16 +18,8 @@ class Home extends Component {
             updatedAccounts: {},
             serverResponseUpdateAccount: '',
             accountsToBeDeleted: [],
-            showDashboard: true,
-            showListItemMenu: false,
-            item: {
-                title: '',
-                tag: '',
-                quantity: '',
-                price: '',
-                description: ''
-            },
-            serverResponseListItem: '',
+            showDashboard: this.props.showDashboard || true,
+            showListAnItem: this.props.showListAnItem || false
         }
     }
     getAccounts = async () => {
@@ -93,55 +85,16 @@ class Home extends Component {
         });
     };
 
-    handleListItemsClick = () => {
+    handleListAnItemClick = () => {
         this.setState({
             showDashboard: false,
-            showListItemMenu: true
-        });
-    };
-
-    handleGoBackClick = () => {
-        this.setState({
-            showDashboard: true,
-            showListItemMenu: false
-        });
-    };
-
-    handleSaveItemClick = async () => {
-        const { item } = this.state;
-        console.log(item);
-
-        const response = await axios.post('http://localhost:5000/home/saveItem', {
-            item
-        });
-        this.setState({
-            serverResponseListItem: response.data,
-            item: {
-                title: '',
-                tag: '',
-                quantity: '',
-                price: '',
-                description: ''
-            },
+            showListAnItem: true
         });
     };
 
     render() {
-        const { role, email, username, accountList, roleList, areAccountsToggled, serverResponseUpdateAccount,
-            showDashboard, showListItemMenu, serverResponseListItem } = this.state;
-
-        const categoryTags = [
-            'Apparel',
-            'Electronics',
-            'Home and Garden',
-            'Toys',
-            'Books',
-            'Health and Beauty',
-            'Sports and Outdoors',
-            'Food and Groceries',
-            'Automotive',
-            'Pet Supplies'
-        ];
+        const { role, email, username, accountList, roleList, areAccountsToggled,
+            serverResponseUpdateAccount, showDashboard, showListAnItem } = this.state;
 
         return (
             <div className='mainContainer'>
@@ -156,7 +109,7 @@ class Home extends Component {
                             <div className='dashboard'>
                                 <button className='dashboardButton'>View items</button>
                                 <br />
-                                <button className='dashboardButton' onClick={this.handleListItemsClick}>List items</button>
+                                <button className='dashboardButton' onClick={this.handleListAnItemClick}>List an item</button>
                                 <br />
                                 {role === 'administrator' &&
                                     <button
@@ -210,106 +163,17 @@ class Home extends Component {
                         }
                     </div>
                 }
-                {showListItemMenu &&
-                    <div className='listItemMenu'>
-                        <button className='dashboardButton marginBottom' onClick={this.handleGoBackClick}>Go back</button>
-                        <br />
-                        <div>
-                            <label htmlFor='title' className='title'>Title</label>
-                            <input
-                                type='text'
-                                // onBlur={event => this.handleTitleBlur(event)}
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        title: event.target.value
-                                    }
-                                })}
-                                value={this.state.item.title}
-                                id='title'
-                                className='titleTextbox'
-                            />
-                        </div>
-                        <br />
-                        <div>
-                            <label htmlFor='tag' className='tag'>Tag</label>
-                            <select
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        tag: event.target.value
-                                    }
-                                })}
-                                value={this.state.item.tag}
-                                id='tag'
-                                className='tagSelect'
-                            >
-                                {categoryTags.map(tag => (
-                                    <option key={tag} value={tag}>{tag}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <br />
-                        <div>
-                            <label htmlFor='quantity' className='quantity'>Quantity</label>
-                            <input
-                                type='text'
-                                // onBlur={event => this.handleQuantityBlur(event)}
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        quantity: event.target.value
-                                    }
-                                })}
-                                value={this.state.item.quantity}
-                                id='quantity'
-                                className='quantityTextbox'
-                            />
-                        </div>
-                        <br />
-                        <div>
-                            <label htmlFor='price' className='price'>Price</label>
-                            <input
-                                type='text'
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        price: event.target.value
-                                    }
-                                })}
-                                value={this.state.item.price}
-                                id='price'
-                                className='priceTextbox'
-                            />
-                        </div>
-                        <br />
-                        <div className='divDescription'>
-                            <label htmlFor='description' className='description'>Description</label>
-                            <textarea
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        description: event.target.value
-                                    }
-                                })}
-                                value={this.state.item.description}
-                                id='description'
-                                className='descriptionTextarea'
-                            />
-                        </div>
-                        <div className='center'>
-                            <button className='saveButton' onClick={this.handleSaveItemClick}>Save Item</button>
-                        </div>
-                        {serverResponseListItem &&
-                            <div className={serverResponseListItem === 'The item was listed.' ? 'successfulItemList' : 'itemListError'}>
-                                {serverResponseListItem}
-                            </div>
-                        }
-                    </div>
+                {showListAnItem &&
+                    <ListAnItem
+                        username={this.state.username}
+                        email={this.state.email}
+                        role={this.state.role}
+                        showDashboard={showDashboard}
+                        showListAnItem={showListAnItem}
+                    />
                 }
             </div>
         )
-
     }
 }
 

@@ -1,0 +1,86 @@
+.listAnItemMenu {
+    text-align: center;
+    min-width: 1000px;
+}
+
+.dashboardButton {
+    margin: 0.5%;
+    color: rgb(255, 255, 255);
+    background-color: rgb(80, 80, 80);
+    border: none;
+    border-radius: 0.7vmax;
+    font-size: 120%;
+    padding: 0.4% 1% 0.4% 1%;
+    cursor: pointer;
+}
+
+.title,
+.quantity,
+.tag,
+.price,
+.description {
+    font-size: 120%;
+}
+
+.titleTextbox,
+.quantityTextbox,
+.tagSelect,
+.priceTextbox,
+.descriptionTextarea {
+    margin-top: 0.5%;
+    margin-left: 1%;
+    font-size: 90%;
+}
+
+.titleTextbox {
+    width: 200px;
+}
+
+.quantityTextbox,
+.priceTextbox {
+    width: 80px;
+}
+
+.descriptionTextarea {
+    height: 5vmax;
+    width: 260px;
+}
+
+.divDescription {
+    display: flex;
+    justify-content: center;
+}
+
+.saveButton {
+    margin-top: 2.5%;
+    color: rgb(255, 255, 255);
+    background-color: rgb(80, 80, 80);
+    border: none;
+    border-radius: 0.7vmax;
+    font-size: 120%;
+    padding: 0.4% 1% 0.4% 1%;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+
+.successfulListing {
+    text-align: center;
+    color: green;
+    font-size: 130%;
+    padding-top: 2%;
+}
+
+.errorListing {
+    text-align: center;
+    color: rgb(150, 0, 0);
+    font-size: 130%;
+    padding-top: 2%;
+}
+
+.listAnItemErrors {
+    margin-top: 2%;
+    font-size: 120%;
+    color: rgb(193, 25, 25);
+}
