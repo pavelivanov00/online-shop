@@ -12,17 +12,18 @@ class ListAnItem extends Component {
             showListAnItem: this.props.showListAnItem,
             item: {
                 title: '',
-                tag: '',
+                tag: 'Choose tag',
                 quantity: '',
                 price: '',
                 description: ''
             },
-            serverResponseListAnItem: '',
-            listAnItemErrors: [],
-            itemTitleError: '',
-            itemQuantityError: '',
-            itemPriceError: '',
+            itemTitleError: 'Item title must be longer than 3 characters and shorter than 70',
+            itemTagError: 'Tag is not chosen',
+            itemQuantityError: 'Item quantity must be a number and be 0 or greater',
+            itemPriceError: 'Item price must be a number and be 0 or greater',
             showListAnItemErrors: false,
+            serverResponseListAnItem: '',
+            showServerResponse: false,
         }
     };
 
@@ -33,36 +34,41 @@ class ListAnItem extends Component {
         });
     };
 
-    handleTitleBlur = event => {
-        const title = event.target.value;
+    validate = async () => {
+        const { item } = this.state;
+        const title = item.title;
         if (title.length < 3 || title.length > 70) this.setState({
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 70'
         });
         else this.setState({ itemTitleError: '' });
-    };
 
-    handleQuantityBlur = event => {
-        const quantity = parseInt(event.target.value);
+        const tag = item.tag;
+        console.log(tag);
+        if (tag === 'Choose tag') this.setState({ itemTagError: 'Tag is not chosen' });
+        else this.setState({ itemTagError: '' });
 
+        const quantity = parseInt(item.quantity);
         if (isNaN(quantity) || quantity < 0) this.setState({
             itemQuantityError: 'Item quantity must be a number and be 0 or greater'
         });
         else this.setState({ itemQuantityError: '' });
-    };
 
-    handlePriceBlur = event => {
-        const price = parseInt(event.target.value);
 
+        const price = parseInt(item.price);
         if (isNaN(price) || price < 0) this.setState({
             itemPriceError: 'Item price must be a number and be 0 or greater'
         });
         else this.setState({ itemPriceError: '' });
+
+        this.setState({showServerResponse:false});
     };
 
     handleSaveItemClick = async () => {
-        const { item, itemTitleError, itemQuantityError, itemPriceError } = this.state;
+        await this.validate();
+        const { item, itemTitleError, itemTagError, itemQuantityError, itemPriceError } = this.state;
 
-        if (itemTitleError || itemQuantityError || itemPriceError) {
+        if (itemTitleError || itemQuantityError || itemPriceError || itemTagError) {
+            this.setState({ showListAnItemErrors: true })
             return;
         }
         console.log(item);
@@ -71,25 +77,28 @@ class ListAnItem extends Component {
             item
         });
         this.setState({
-            serverResponseListAnItem: response.data,
             item: {
                 title: '',
-                tag: '',
+                tag: 'Choose tag',
                 quantity: '',
                 price: '',
                 description: ''
             },
-            itemTitleError: '',
-            itemQuantityError: '',
-            itemPriceError: ''
+
+            itemTitleError: 'Item title must be longer than 3 characters and shorter than 70',
+            itemTagError: 'Tag is not chosen',
+            itemQuantityError: 'Item quantity must be a number and be 0 or greater',
+            itemPriceError: 'Item price must be a number and be 0 or greater',
+            showListAnItemErrors: false,
+            serverResponseListAnItem: response.data,
+            showServerResponse: true,
         });
     };
 
     render() {
-        const { showListAnItem, showDashboard, serverResponseListAnItem, itemTitleError, 
-            itemQuantityError, itemPriceError } = this.state;
+        const { showListAnItem, showDashboard, itemTitleError, itemTagError,itemQuantityError, 
+            itemPriceError, showListAnItemErrors, serverResponseListAnItem, showServerResponse } = this.state;
         const categoryTags = [
-            'Apparel',
             'Electronics',
             'Home and Garden',
             'Toys',
@@ -118,7 +127,6 @@ class ListAnItem extends Component {
                             <label htmlFor='title' className='title'>Title</label>
                             <input
                                 type='text'
-                                onBlur={event => this.handleTitleBlur(event)}
                                 onChange={event => this.setState({
                                     item: {
                                         ...this.state.item,
@@ -144,6 +152,7 @@ class ListAnItem extends Component {
                                 id='tag'
                                 className='tagSelect'
                             >
+                                <option value='Choose tag'>Choose tag</option>
                                 {categoryTags.map(tag => (
                                     <option key={tag} value={tag}>{tag}</option>
                                 ))}
@@ -154,7 +163,6 @@ class ListAnItem extends Component {
                             <label htmlFor='quantity' className='quantity'>Quantity</label>
                             <input
                                 type='text'
-                                onBlur={event => this.handleQuantityBlur(event)}
                                 onChange={event => this.setState({
                                     item: {
                                         ...this.state.item,
@@ -171,7 +179,6 @@ class ListAnItem extends Component {
                             <label htmlFor='price' className='price'>Price</label>
                             <input
                                 type='text'
-                                onBlur={event => this.handlePriceBlur(event)}
                                 onChange={event => this.setState({
                                     item: {
                                         ...this.state.item,
@@ -201,14 +208,15 @@ class ListAnItem extends Component {
                         <div>
                             <button className='saveButton' onClick={this.handleSaveItemClick}>Save Item</button>
                         </div>
-                        {serverResponseListAnItem &&
+                        {showServerResponse &&
                             <div className={serverResponseListAnItem === 'The item was listed.' ? 'successfulListing' : 'errorListing'}>
                                 {serverResponseListAnItem}
                             </div>
                         }
-                        {(itemTitleError || itemQuantityError || itemPriceError) &&
+                        {showListAnItemErrors &&
                             <div className='listAnItemErrors'>
                                 <p>{itemTitleError}</p>
+                                <p>{itemTagError}</p>
                                 <p>{itemQuantityError}</p>
                                 <p>{itemPriceError}</p>
                             </div>

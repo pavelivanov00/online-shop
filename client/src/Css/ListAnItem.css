@@ -33,7 +33,7 @@
 }
 
 .titleTextbox {
-    width: 200px;
+    width: 19vmax;
 }
 
 .quantityTextbox,
@@ -42,8 +42,9 @@
 }
 
 .descriptionTextarea {
-    height: 5vmax;
-    width: 260px;
+    height: 9vmax;
+    width: 23vmax;
+    font-size: 120%;
 }
 
 .divDescription {
