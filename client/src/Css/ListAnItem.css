@@ -18,6 +18,7 @@
 .quantity,
 .tag,
 .price,
+.imageURL,
 .description {
     font-size: 120%;
 }
@@ -26,13 +27,15 @@
 .quantityTextbox,
 .tagSelect,
 .priceTextbox,
+.imageURLTextbox,
 .descriptionTextarea {
     margin-top: 0.5%;
     margin-left: 1%;
     font-size: 90%;
 }
 
-.titleTextbox {
+.titleTextbox,
+.imageURLTextbox {
     width: 19vmax;
 }
 
@@ -42,7 +45,7 @@
 }
 
 .descriptionTextarea {
-    height: 9vmax;
+    height: 7vmax;
     width: 23vmax;
     font-size: 120%;
 }
@@ -52,8 +55,9 @@
     justify-content: center;
 }
 
-.saveButton {
-    margin-top: 2.5%;
+.saveItemButton {
+    margin-top: 2%;
+    margin-bottom: 2%;
     color: rgb(255, 255, 255);
     background-color: rgb(80, 80, 80);
     border: none;
@@ -70,18 +74,47 @@
     text-align: center;
     color: green;
     font-size: 130%;
-    padding-top: 2%;
+    margin-bottom: 2%;
 }
 
 .errorListing {
     text-align: center;
     color: rgb(150, 0, 0);
     font-size: 130%;
-    padding-top: 2%;
+    margin-bottom: 2%;
 }
 
 .listAnItemErrors {
     margin-top: 2%;
     font-size: 120%;
     color: rgb(193, 25, 25);
+}
+
+.previewItem {
+    display: flex;
+    justify-content: center;
+}
+
+.titleContainer,
+.tagContainer,
+.quantityContainer,
+.priceContainer,
+.descriptionContainer {
+    font-size: 120%;
+    justify-content: center;
+    margin-bottom: 2vmax;
+    word-wrap: break-word;
+}
+
+.infoContainer {
+    max-width: 40%;
+    margin-right: 3%;
+}
+
+.imageContainer {
+    max-width: 40%;
+}
+
+.image {
+    max-width: 100%;
 }

@@ -15,6 +15,7 @@ class ListAnItem extends Component {
                 tag: 'Choose tag',
                 quantity: '',
                 price: '',
+                imageURL: '',
                 description: ''
             },
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 70',
@@ -34,7 +35,7 @@ class ListAnItem extends Component {
         });
     };
 
-    validate = async () => {
+    validateInputs = async () => {
         const { item } = this.state;
         const title = item.title;
         if (title.length < 3 || title.length > 70) this.setState({
@@ -60,11 +61,11 @@ class ListAnItem extends Component {
         });
         else this.setState({ itemPriceError: '' });
 
-        this.setState({showServerResponse:false});
+        this.setState({ showServerResponse: false });
     };
 
     handleSaveItemClick = async () => {
-        await this.validate();
+        await this.validateInputs();
         const { item, itemTitleError, itemTagError, itemQuantityError, itemPriceError } = this.state;
 
         if (itemTitleError || itemQuantityError || itemPriceError || itemTagError) {
@@ -82,6 +83,7 @@ class ListAnItem extends Component {
                 tag: 'Choose tag',
                 quantity: '',
                 price: '',
+                imageURL: '',
                 description: ''
             },
 
@@ -96,7 +98,7 @@ class ListAnItem extends Component {
     };
 
     render() {
-        const { showListAnItem, showDashboard, itemTitleError, itemTagError,itemQuantityError, 
+        const { showListAnItem, showDashboard, item, itemTitleError, itemTagError, itemQuantityError,
             itemPriceError, showListAnItemErrors, serverResponseListAnItem, showServerResponse } = this.state;
         const categoryTags = [
             'Electronics',
@@ -191,6 +193,22 @@ class ListAnItem extends Component {
                             />
                         </div>
                         <br />
+                        <div>
+                            <label htmlFor='imageURL' className='imageURL'>Image URL (if available)</label>
+                            <input
+                                type='text'
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...this.state.item,
+                                        imageURL: event.target.value
+                                    }
+                                })}
+                                value={this.state.item.imageURL}
+                                id='imageURL'
+                                className='imageURLTextbox'
+                            />
+                        </div>
+                        <br />
                         <div className='divDescription'>
                             <label htmlFor='description' className='description'>Description</label>
                             <textarea
@@ -206,7 +224,7 @@ class ListAnItem extends Component {
                             />
                         </div>
                         <div>
-                            <button className='saveButton' onClick={this.handleSaveItemClick}>Save Item</button>
+                            <button className='saveItemButton' onClick={this.handleSaveItemClick}>Save Item</button>
                         </div>
                         {showServerResponse &&
                             <div className={serverResponseListAnItem === 'The item was listed.' ? 'successfulListing' : 'errorListing'}>
@@ -221,6 +239,28 @@ class ListAnItem extends Component {
                                 <p>{itemPriceError}</p>
                             </div>
                         }
+                        <div className='previewItem'>
+                            <div className='infoContainer'>
+                                <div className='titleContainer'>
+                                    Title: {item.title}
+                                </div>
+                                <div className='tagContainer'>
+                                    Tag: {item.tag !== 'Choose tag' ? item.tag : '' }
+                                </div>
+                                <div className='quantityContainer'>
+                                    Quantity: {item.quantity}
+                                </div>
+                                <div className='priceContainer'>
+                                    Price: {item.price}
+                                </div>
+                                <div className='descriptionContainer'>
+                                    Description: {item.description}
+                                </div>
+                            </div>
+                            <div className='imageContainer'>
+                                <img src={this.state.item.imageURL} alt='test' className='image'></img>
+                            </div>
+                        </div>
                     </div>
                 }
                 {showDashboard &&

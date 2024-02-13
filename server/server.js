@@ -148,6 +148,7 @@ app.post('/home/saveItem', async (req, res) => {
     const tag = item.tag;
     const quantity = item.quantity;
     const price = item.price;
+    const imageURL = item.imageURL;
     const description = item.description;
 
     try {
@@ -164,6 +165,7 @@ app.post('/home/saveItem', async (req, res) => {
                 tag,
                 quantity,
                 price,
+                imageURL,
                 description
             };
             await db.collection('items').insertOne({ item });
