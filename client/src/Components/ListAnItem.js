@@ -245,7 +245,7 @@ class ListAnItem extends Component {
                                     Title: {item.title}
                                 </div>
                                 <div className='tagContainer'>
-                                    Tag: {item.tag !== 'Choose tag' ? item.tag : '' }
+                                    Tag: {item.tag !== 'Choose tag' ? item.tag : ''}
                                 </div>
                                 <div className='quantityContainer'>
                                     Quantity: {item.quantity}
@@ -257,9 +257,11 @@ class ListAnItem extends Component {
                                     Description: {item.description}
                                 </div>
                             </div>
-                            <div className='imageContainer'>
-                                <img src={this.state.item.imageURL} alt='test' className='image'></img>
-                            </div>
+                            {item.imageURL &&
+                                <div className='imageContainer'>
+                                    <img src={item.imageURL} alt='preview' className='image'></img>
+                                </div>
+                            }
                         </div>
                     </div>
                 }
