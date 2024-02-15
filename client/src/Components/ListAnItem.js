@@ -18,7 +18,7 @@ class ListAnItem extends Component {
                 imageURL: '',
                 description: ''
             },
-            itemTitleError: 'Item title must be longer than 3 characters and shorter than 70',
+            itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
             itemTagError: 'Tag is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
@@ -38,8 +38,8 @@ class ListAnItem extends Component {
     validateInputs = async () => {
         const { item } = this.state;
         const title = item.title;
-        if (title.length < 3 || title.length > 70) this.setState({
-            itemTitleError: 'Item title must be longer than 3 characters and shorter than 70'
+        if (title.length < 4 || title.length > 100) this.setState({
+            itemTitleError: 'Item title must be longer than 3 characters and shorter than 100'
         });
         else this.setState({ itemTitleError: '' });
 
@@ -54,14 +54,12 @@ class ListAnItem extends Component {
         });
         else this.setState({ itemQuantityError: '' });
 
-
-        const price = parseInt(item.price);
+        const priceString = item.price.replace(/[^0-9]/g, '');
+        const price = parseInt(priceString);
         if (isNaN(price) || price < 0) this.setState({
             itemPriceError: 'Item price must be a number and be 0 or greater'
         });
         else this.setState({ itemPriceError: '' });
-
-        this.setState({ showServerResponse: false });
     };
 
     handleSaveItemClick = async () => {
@@ -87,7 +85,7 @@ class ListAnItem extends Component {
                 description: ''
             },
 
-            itemTitleError: 'Item title must be longer than 3 characters and shorter than 70',
+            itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
             itemTagError: 'Tag is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
@@ -107,7 +105,6 @@ class ListAnItem extends Component {
             'Books',
             'Health and Beauty',
             'Sports and Outdoors',
-            'Food and Groceries',
             'Automotive',
             'Pet Supplies'
         ];
@@ -133,7 +130,8 @@ class ListAnItem extends Component {
                                     item: {
                                         ...this.state.item,
                                         title: event.target.value
-                                    }
+                                    },
+                                    showServerResponse: false
                                 })}
                                 value={this.state.item.title}
                                 id='title'
@@ -148,7 +146,8 @@ class ListAnItem extends Component {
                                     item: {
                                         ...this.state.item,
                                         tag: event.target.value
-                                    }
+                                    },
+                                    showServerResponse: false
                                 })}
                                 value={this.state.item.tag}
                                 id='tag'
@@ -169,7 +168,8 @@ class ListAnItem extends Component {
                                     item: {
                                         ...this.state.item,
                                         quantity: event.target.value
-                                    }
+                                    },
+                                    showServerResponse: false
                                 })}
                                 value={this.state.item.quantity}
                                 id='quantity'
@@ -181,12 +181,16 @@ class ListAnItem extends Component {
                             <label htmlFor='price' className='price'>Price</label>
                             <input
                                 type='text'
-                                onChange={event => this.setState({
-                                    item: {
-                                        ...this.state.item,
-                                        price: event.target.value
-                                    }
-                                })}
+                                onChange={event => {
+                                    const price = event.target.value;
+                                    this.setState({
+                                        item: {
+                                            ...this.state.item, 
+                                            price: price.startsWith("$") ? price : "$" + price
+                                        },
+                                        showServerResponse: false
+                                    })
+                                }}
                                 value={this.state.item.price}
                                 id='price'
                                 className='priceTextbox'
@@ -201,7 +205,8 @@ class ListAnItem extends Component {
                                     item: {
                                         ...this.state.item,
                                         imageURL: event.target.value
-                                    }
+                                    },
+                                    showServerResponse: false
                                 })}
                                 value={this.state.item.imageURL}
                                 id='imageURL'
@@ -216,7 +221,8 @@ class ListAnItem extends Component {
                                     item: {
                                         ...this.state.item,
                                         description: event.target.value
-                                    }
+                                    },
+                                    showServerResponse: false
                                 })}
                                 value={this.state.item.description}
                                 id='description'

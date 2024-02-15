@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ListAnItem from './ListAnItem';
+import ViewItems from './ViewItems';
 import '../Css/Home.css';
 
 class Home extends Component {
@@ -18,8 +19,11 @@ class Home extends Component {
             updatedAccounts: {},
             serverResponseUpdateAccount: '',
             accountsToBeDeleted: [],
+
             showDashboard: this.props.showDashboard || true,
-            showListAnItem: this.props.showListAnItem || false
+            showListAnItem: this.props.showListAnItem || false,
+
+            viewItems: false
         }
     }
     getAccounts = async () => {
@@ -92,9 +96,16 @@ class Home extends Component {
         });
     };
 
+    handleViewItemsClick = () => {
+        this.setState({
+            showDashboard: false,
+            viewItems: true
+        });
+    }
+
     render() {
         const { role, email, username, accountList, roleList, areAccountsToggled,
-            serverResponseUpdateAccount, showDashboard, showListAnItem } = this.state;
+            serverResponseUpdateAccount, showDashboard, showListAnItem, viewItems } = this.state;
 
         return (
             <div className='mainContainer'>
@@ -107,7 +118,7 @@ class Home extends Component {
                         </div>
                         {(role === 'administrator' || role === 'manager') &&
                             <div className='dashboard'>
-                                <button className='dashboardButton'>View items</button>
+                                <button className='dashboardButton' onClick={this.handleViewItemsClick}>View items</button>
                                 <br />
                                 <button className='dashboardButton' onClick={this.handleListAnItemClick}>List an item</button>
                                 <br />
@@ -170,6 +181,12 @@ class Home extends Component {
                         role={this.state.role}
                         showDashboard={showDashboard}
                         showListAnItem={showListAnItem}
+                    />
+                }
+                {viewItems &&
+                    <ViewItems
+                        showDashboard={showDashboard}
+                        viewItems={viewItems}
                     />
                 }
             </div>
