@@ -180,7 +180,7 @@ app.post('/home/saveItem', async (req, res) => {
 
 app.get('/home/fetchItems', async (req, res) => {
     try {
-        const items = await db.collection('items').find({}).toArray();
+        const items = await db.collection('items').find({}, { projection: { _id: 0 } }).toArray();
         res.json(items);
     } catch (error) {
         console.error('Error retrieving items:', error);

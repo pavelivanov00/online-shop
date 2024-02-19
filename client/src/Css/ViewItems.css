@@ -1,0 +1,94 @@
+.itemsContainer {
+    min-width: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgba(226, 222, 222, 0.997);
+}
+
+.item {
+    width: 18%;
+    max-height: 25vmax;
+    margin: 0.5%;
+    box-sizing: border-box;
+    text-align: left;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.adjustImage {
+    width: 100%;
+    height: 65%;
+}
+
+.itemImage {
+    height: 100%;
+    width: 100%;
+    max-width: 350px;
+    max-height: 350px;
+    object-fit: contain;
+    text-align: center;
+}
+
+.marginLeft {
+    margin-left: 2%;
+}
+
+.itemPrice {
+    font-size: 130%;
+    padding-left: 2.5%;
+    padding-top: 2.5%;
+    display: flex;
+}
+
+.navigation {
+    display: flex;
+    margin-bottom: 0.5%;
+}
+
+.rightside {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+}
+
+.priceAndCartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.itemTitle {
+    padding-left: 2.5%;
+    padding-top: 2.5%;
+    font-size: 130%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2; 
+}
+
+.button {
+    background-color: rgba(56, 56, 56, 0.971);
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 0.5% 1.2%;
+    border-radius: 0.7vmax;
+    font-size: 110%;
+    font-family: Arial, sans-serif;
+}
+
+.button:hover {
+    background-color: rgb(87, 87, 87);
+}
+
+.addToCartButton {
+    margin-top: 1%;
+    font-size: 120%;
+    border-radius: 0%;
+}
