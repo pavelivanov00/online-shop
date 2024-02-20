@@ -1,8 +1,13 @@
+.itemsAndFiltersContainer {
+    display: flex;
+}
+
 .itemsContainer {
     min-width: 1000px;
     display: flex;
     flex-wrap: wrap;
     background-color: rgba(226, 222, 222, 0.997);
+    flex: 0.92;
 }
 
 .item {
@@ -47,6 +52,12 @@
     margin-bottom: 0.5%;
 }
 
+.searchbar {
+    width: 25%;
+    max-height: 18px;
+    margin-left: 6%;
+}
+
 .rightside {
     display: flex;
     width: 100%;
@@ -69,7 +80,7 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    -webkit-line-clamp: 2; 
+    -webkit-line-clamp: 2;
 }
 
 .button {
@@ -84,11 +95,66 @@
 }
 
 .button:hover {
-    background-color: rgb(87, 87, 87);
+    background-color: rgb(35, 35, 35);
 }
 
 .addToCartButton {
     margin-top: 1%;
     font-size: 120%;
     border-radius: 0%;
+}
+
+.leftPanel {
+    flex: 0.08;
+    margin-right: 1.5%;
+}
+
+.priceFilter {
+    margin-bottom: 20%;
+}
+
+.conditionFilter {
+    display: flex;
+    flex-direction: column;
+}
+
+.priceFilterLabel,
+.conditionFilterLabel {
+    font-size: 120%;
+    margin-bottom: 6%;
+    font-family: Arial, sans-serif;
+}
+
+.priceLimit {
+    width: 56px;
+    font-size: 110%;
+    height: 18px;
+}
+
+.priceSeparator {
+    margin-left: 6%;
+    margin-right: 6%;
+    font-size: 120%;
+}
+
+.priceFilterContainer {
+    display: flex;
+}
+
+.conditionOption {
+    font-size: 120%;
+}
+
+.toggleCategoriesButton {
+    padding: 5% 14%;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+}
+
+.categoryFilter {
+    margin-bottom: 10%;
+    padding: 5% 10%;
 }
