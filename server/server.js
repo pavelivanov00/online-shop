@@ -180,13 +180,20 @@ app.post('/home/saveItem', async (req, res) => {
 
 app.get('/home/fetchItems', async (req, res) => {
     try {
-        const items = await db.collection('items').find({}, { projection: { _id: 0 } }).toArray();
+        let query = {};
+
+        if (req.query.category) {
+            query['item.category'] = req.query.category
+        }
+        
+        const items = await db.collection('items').find(query, { projection: { _id: 0 } }).toArray();
         res.json(items);
     } catch (error) {
         console.error('Error retrieving items:', error);
         res.status(500).json({ error: 'Failed to retrieve items' });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

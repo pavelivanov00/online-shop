@@ -16,7 +16,7 @@
 
 .title,
 .quantity,
-.tag,
+.category,
 .price,
 .imageURL,
 .description {
@@ -25,7 +25,7 @@
 
 .titleTextbox,
 .quantityTextbox,
-.tagSelect,
+.categorySelect,
 .priceTextbox,
 .imageURLTextbox,
 .descriptionTextarea {
@@ -96,7 +96,7 @@
 }
 
 .titleContainer,
-.tagContainer,
+.categoryContainer,
 .quantityContainer,
 .priceContainer,
 .descriptionContainer {

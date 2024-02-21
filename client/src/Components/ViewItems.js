@@ -13,6 +13,9 @@ class ViewItems extends Component {
             fetchedItems: [],
             search: '',
             showCategories: false,
+            filterByCondition: '',
+            minPrice: '',
+            maxPrice: '',
         }
     }
     componentDidMount() {
@@ -33,14 +36,21 @@ class ViewItems extends Component {
         this.setState(prevState => ({ showCategories: !prevState.showCategories }));
     };
 
-    handleCategoryPick = () => {
+    handleCategoryPick = async (event) => {
         this.setState({ showCategories: false });
-    }
+        const category = event.target.innerText;
+        try {
+            const response = await axios.get(`http://localhost:5000/home/fetchItems?category=${category}`);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
 
     render() {
-        const { viewItems, fetchedItems, search, itemCondition, showCategories } = this.state;
+        const { viewItems, fetchedItems, search, filterByCondition, showCategories } = this.state;
 
-        const categoryTags = [
+        const categories = [
             'Electronics',
             'Home and Garden',
             'Toys',
@@ -97,13 +107,13 @@ class ViewItems extends Component {
                     <div className='leftPanel'>
                         {showCategories ?
                             <div className='categories'>
-                                {categoryTags.map((tag, index) =>
+                                {categories.map((category, index) =>
                                     <button
                                         key={index}
                                         className='categoryFilter button'
-                                        onClick={this.handleCategoryPick}
+                                        onClick={event => this.handleCategoryPick(event)}
                                     >
-                                        {tag}
+                                        {category}
                                     </button>
                                 )}
                             </div>
@@ -112,34 +122,47 @@ class ViewItems extends Component {
                                 <div className='priceFilter'>
                                     <div className='priceFilterLabel'>Price:</div>
                                     <div className='priceFilterContainer'>
-                                        <input type='text' className='priceLimit'></input>
+                                        <input
+                                            type='text'
+                                            className='priceLimit'
+                                            onChange={event => this.setState({ minPrice: event.target.value })}
+                                        >
+                                        </input>
                                         <div className='priceSeparator'>-</div>
-                                        <input type='text' className='priceLimit'></input>
+                                        <input
+                                            type='text'
+                                            className='priceLimit'
+                                            onChange={event => this.setState({ minPrice: event.target.value })}
+                                        >
+                                        </input>
                                     </div>
                                 </div><div className='conditionFilter'>
                                     <div className='conditionFilterLabel'>Condition: </div>
                                     <label className='conditionOption'>
                                         <input
                                             type='radio'
-                                            value='brand new'
-                                            checked={itemCondition === 'brand new'}
-                                            onChange={this.handleConditionChange} />
+                                            value='Brand new'
+                                            checked={filterByCondition === 'Brand new'}
+                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                        />
                                         Brand new
                                     </label>
                                     <label className='conditionOption'>
                                         <input
                                             type='radio'
-                                            value='unpacked'
-                                            checked={itemCondition === 'unpacked'}
-                                            onChange={this.handleConditionChange} />
+                                            value='Unpacked'
+                                            checked={filterByCondition === 'Unpacked'}
+                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                        />
                                         Unpacked
                                     </label>
                                     <label className='conditionOption'>
                                         <input
                                             type='radio'
-                                            value='damaged'
-                                            checked={itemCondition === 'damaged'}
-                                            onChange={this.handleConditionChange} />
+                                            value='Damaged'
+                                            checked={filterByCondition === 'Damaged'}
+                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                        />
                                         Damaged
                                     </label>
                                 </div>

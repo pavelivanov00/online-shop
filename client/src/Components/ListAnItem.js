@@ -12,14 +12,14 @@ class ListAnItem extends Component {
             showListAnItem: this.props.showListAnItem,
             item: {
                 title: '',
-                tag: 'Choose tag',
+                category: 'Choose category',
                 quantity: '',
                 price: '',
                 imageURL: '',
                 description: ''
             },
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
-            itemTagError: 'Tag is not chosen',
+            itemCategoryError: 'Category is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
             showListAnItemErrors: false,
@@ -43,10 +43,10 @@ class ListAnItem extends Component {
         });
         else this.setState({ itemTitleError: '' });
 
-        const tag = item.tag;
-        console.log(tag);
-        if (tag === 'Choose tag') this.setState({ itemTagError: 'Tag is not chosen' });
-        else this.setState({ itemTagError: '' });
+        const category = item.category;
+        console.log(category);
+        if (category === 'Choose category') this.setState({ itemCategoryError: 'Category is not chosen' });
+        else this.setState({ itemCategoryError: '' });
 
         const quantity = parseInt(item.quantity);
         if (isNaN(quantity) || quantity < 0) this.setState({
@@ -64,9 +64,9 @@ class ListAnItem extends Component {
 
     handleSaveItemClick = async () => {
         await this.validateInputs();
-        const { item, itemTitleError, itemTagError, itemQuantityError, itemPriceError } = this.state;
+        const { item, itemTitleError, itemCategoryError, itemQuantityError, itemPriceError } = this.state;
 
-        if (itemTitleError || itemQuantityError || itemPriceError || itemTagError) {
+        if (itemTitleError || itemQuantityError || itemPriceError || itemCategoryError) {
             this.setState({ showListAnItemErrors: true })
             return;
         }
@@ -78,7 +78,7 @@ class ListAnItem extends Component {
         this.setState({
             item: {
                 title: '',
-                tag: 'Choose tag',
+                category: 'Choose category',
                 quantity: '',
                 price: '',
                 imageURL: '',
@@ -86,7 +86,7 @@ class ListAnItem extends Component {
             },
 
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
-            itemTagError: 'Tag is not chosen',
+            itemCategoryError: 'Category is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
             showListAnItemErrors: false,
@@ -96,9 +96,9 @@ class ListAnItem extends Component {
     };
 
     render() {
-        const { showListAnItem, showDashboard, item, itemTitleError, itemTagError, itemQuantityError,
+        const { showListAnItem, showDashboard, item, itemTitleError, itemCategoryError, itemQuantityError,
             itemPriceError, showListAnItemErrors, serverResponseListAnItem, showServerResponse } = this.state;
-        const categoryTags = [
+        const categories = [
             'Electronics',
             'Home and Garden',
             'Toys',
@@ -140,22 +140,22 @@ class ListAnItem extends Component {
                         </div>
                         <br />
                         <div>
-                            <label htmlFor='tag' className='tag'>Tag</label>
+                            <label htmlFor='category' className='category'>Category</label>
                             <select
                                 onChange={event => this.setState({
                                     item: {
                                         ...this.state.item,
-                                        tag: event.target.value
+                                        category: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.tag}
-                                id='tag'
-                                className='tagSelect'
+                                value={this.state.item.category}
+                                id='category'
+                                className='categorySelect'
                             >
-                                <option value='Choose tag'>Choose tag</option>
-                                {categoryTags.map(tag => (
-                                    <option key={tag} value={tag}>{tag}</option>
+                                <option value='Choose category'>Choose category</option>
+                                {categories.map(category => (
+                                    <option key={category} value={category}>{category}</option>
                                 ))}
                             </select>
                         </div>
@@ -240,7 +240,7 @@ class ListAnItem extends Component {
                         {showListAnItemErrors &&
                             <div className='listAnItemErrors'>
                                 <p>{itemTitleError}</p>
-                                <p>{itemTagError}</p>
+                                <p>{itemCategoryError}</p>
                                 <p>{itemQuantityError}</p>
                                 <p>{itemPriceError}</p>
                             </div>
@@ -250,8 +250,8 @@ class ListAnItem extends Component {
                                 <div className='titleContainer'>
                                     Title: {item.title}
                                 </div>
-                                <div className='tagContainer'>
-                                    Tag: {item.tag !== 'Choose tag' ? item.tag : ''}
+                                <div className='categoryContainer'>
+                                    Category: {item.category !== 'Choose category' ? item.category : ''}
                                 </div>
                                 <div className='quantityContainer'>
                                     Quantity: {item.quantity}
