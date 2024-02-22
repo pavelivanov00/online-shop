@@ -13,6 +13,7 @@ class ViewItems extends Component {
             fetchedItems: [],
             search: '',
             showCategories: false,
+            filterByCategory: '',
             filterByCondition: '',
             minPrice: '',
             maxPrice: '',
@@ -31,16 +32,96 @@ class ViewItems extends Component {
         }
     };
 
-
     handleCategoriesToggle = () => {
         this.setState(prevState => ({ showCategories: !prevState.showCategories }));
     };
 
     handleCategoryPick = async (event) => {
-        this.setState({ showCategories: false });
         const category = event.target.innerText;
+        this.setState({ 
+            filterByCategory: category,
+            showCategories: false
+        });
         try {
             const response = await axios.get(`http://localhost:5000/home/fetchItems?category=${category}`);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
+
+    handleMinPriceChange = async (event) => {
+        const minPrice = event.target.value;
+        this.setState({ minPrice });
+        const { filterByCategory, maxPrice, filterByCondition } = this.state;
+
+        try {
+            let url = `http://localhost:5000/home/fetchItems?`;
+            if (filterByCategory) {
+                url += `category=${filterByCategory}&`;
+            }
+            if (minPrice) {
+                url += `minPrice=${minPrice}&`;
+            }
+            if (maxPrice) {
+                url += `maxPrice=${maxPrice}&`;
+            }
+            if (filterByCondition) {
+                url += `filterByCondition=${filterByCondition}&`;
+            }
+            const response = await axios.get(url);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
+
+    handleMaxPriceChange = async (event) => {
+        const maxPrice = event.target.value;
+        this.setState({ maxPrice });
+        const { filterByCategory, minPrice, filterByCondition } = this.state;
+
+        try {
+            let url = `http://localhost:5000/home/fetchItems?`;
+            if (filterByCategory) {
+                url += `category=${filterByCategory}&`;
+            }
+            if (minPrice) {
+                url += `minPrice=${minPrice}&`;
+            }
+            if (maxPrice) {
+                url += `maxPrice=${maxPrice}&`;
+            }
+            if (filterByCondition) {
+                url += `filterByCondition=${filterByCondition}&`;
+            }
+            const response = await axios.get(url);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
+
+    handleConditionChange = async (event) => {
+        const condition = event.target.value;
+        this.setState({ filterByCondition: condition });
+        const { filterByCategory, minPrice, maxPrice } = this.state;
+
+        try {
+            let url = `http://localhost:5000/home/fetchItems?`;
+            if (filterByCategory) {
+                url += `category=${filterByCategory}&`;
+            }
+            if (minPrice) {
+                url += `minPrice=${minPrice}&`;
+            }
+            if (maxPrice) {
+                url += `maxPrice=${maxPrice}&`;
+            }
+            if (condition) {
+                url += `condition=${condition}&`;
+            }
+            const response = await axios.get(url);
             this.setState({ fetchedItems: response.data });
         } catch (error) {
             console.error('Error while fetching items:', error);
@@ -125,14 +206,14 @@ class ViewItems extends Component {
                                         <input
                                             type='text'
                                             className='priceLimit'
-                                            onChange={event => this.setState({ minPrice: event.target.value })}
+                                            onChange={event => this.handleMinPriceChange(event)}
                                         >
                                         </input>
                                         <div className='priceSeparator'>-</div>
                                         <input
                                             type='text'
                                             className='priceLimit'
-                                            onChange={event => this.setState({ minPrice: event.target.value })}
+                                            onChange={event => this.handleMaxPriceChange(event)}
                                         >
                                         </input>
                                     </div>
@@ -143,7 +224,7 @@ class ViewItems extends Component {
                                             type='radio'
                                             value='Brand new'
                                             checked={filterByCondition === 'Brand new'}
-                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                            onChange={event => this.handleConditionChange(event)}
                                         />
                                         Brand new
                                     </label>
@@ -152,7 +233,7 @@ class ViewItems extends Component {
                                             type='radio'
                                             value='Unpacked'
                                             checked={filterByCondition === 'Unpacked'}
-                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                            onChange={event => this.handleConditionChange(event)}
                                         />
                                         Unpacked
                                     </label>
@@ -161,7 +242,7 @@ class ViewItems extends Component {
                                             type='radio'
                                             value='Damaged'
                                             checked={filterByCondition === 'Damaged'}
-                                            onChange={event => this.setState({ filterByCondition: event.target.value })}
+                                            onChange={event => this.handleConditionChange(event)}
                                         />
                                         Damaged
                                     </label>
@@ -182,7 +263,7 @@ class ViewItems extends Component {
                                 <div className='itemTitle'>{item.item.title}</div>
 
                                 <div className='priceAndCartContainer'>
-                                    <div className='itemPrice'>Price: {item.item.price}</div>
+                                    <div className='itemPrice'>Price: {'$' + item.item.price}</div>
                                     <button
                                         className='button addToCartButton'
                                         onClick={this.handleAddToCartButtonClick}

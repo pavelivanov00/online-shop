@@ -13,6 +13,7 @@ class ListAnItem extends Component {
             item: {
                 title: '',
                 category: 'Choose category',
+                condition: 'Choose condition',
                 quantity: '',
                 price: '',
                 imageURL: '',
@@ -20,6 +21,7 @@ class ListAnItem extends Component {
             },
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
             itemCategoryError: 'Category is not chosen',
+            itemConditionError: 'Condition is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
             showListAnItemErrors: false,
@@ -44,9 +46,12 @@ class ListAnItem extends Component {
         else this.setState({ itemTitleError: '' });
 
         const category = item.category;
-        console.log(category);
         if (category === 'Choose category') this.setState({ itemCategoryError: 'Category is not chosen' });
         else this.setState({ itemCategoryError: '' });
+
+        const condition = item.condition;
+        if (condition === 'Choose condition') this.setState({ itemConditionError: 'Condition is not chosen' });
+        else this.setState({ itemConditionError: '' });
 
         const quantity = parseInt(item.quantity);
         if (isNaN(quantity) || quantity < 0) this.setState({
@@ -55,7 +60,7 @@ class ListAnItem extends Component {
         else this.setState({ itemQuantityError: '' });
 
         const priceString = item.price.replace(/[^0-9]/g, '');
-        const price = parseInt(priceString);
+        const price = parseFloat(priceString);
         if (isNaN(price) || price < 0) this.setState({
             itemPriceError: 'Item price must be a number and be 0 or greater'
         });
@@ -64,13 +69,12 @@ class ListAnItem extends Component {
 
     handleSaveItemClick = async () => {
         await this.validateInputs();
-        const { item, itemTitleError, itemCategoryError, itemQuantityError, itemPriceError } = this.state;
+        const { item, itemTitleError, itemCategoryError, itemConditionError, itemQuantityError, itemPriceError } = this.state;
 
-        if (itemTitleError || itemQuantityError || itemPriceError || itemCategoryError) {
+        if (itemTitleError || itemQuantityError || itemPriceError || itemCategoryError || itemConditionError) {
             this.setState({ showListAnItemErrors: true })
             return;
         }
-        console.log(item);
 
         const response = await axios.post('http://localhost:5000/home/saveItem', {
             item
@@ -79,6 +83,7 @@ class ListAnItem extends Component {
             item: {
                 title: '',
                 category: 'Choose category',
+                condition: 'Choose condition',
                 quantity: '',
                 price: '',
                 imageURL: '',
@@ -87,6 +92,7 @@ class ListAnItem extends Component {
 
             itemTitleError: 'Item title must be longer than 3 characters and shorter than 100',
             itemCategoryError: 'Category is not chosen',
+            itemConditionError: 'Condition is not chosen',
             itemQuantityError: 'Item quantity must be a number and be 0 or greater',
             itemPriceError: 'Item price must be a number and be 0 or greater',
             showListAnItemErrors: false,
@@ -96,8 +102,8 @@ class ListAnItem extends Component {
     };
 
     render() {
-        const { showListAnItem, showDashboard, item, itemTitleError, itemCategoryError, itemQuantityError,
-            itemPriceError, showListAnItemErrors, serverResponseListAnItem, showServerResponse } = this.state;
+        const { showListAnItem, showDashboard, item, itemTitleError, itemCategoryError, itemConditionError,
+            itemQuantityError, itemPriceError, showListAnItemErrors, serverResponseListAnItem, showServerResponse } = this.state;
         const categories = [
             'Electronics',
             'Home and Garden',
@@ -107,6 +113,12 @@ class ListAnItem extends Component {
             'Sports and Outdoors',
             'Automotive',
             'Pet Supplies'
+        ];
+
+        const conditions = [
+            'Brand new',
+            'Unpacked',
+            'Damaged'
         ];
 
         return (
@@ -128,12 +140,12 @@ class ListAnItem extends Component {
                                 type='text'
                                 onChange={event => this.setState({
                                     item: {
-                                        ...this.state.item,
+                                        ...item,
                                         title: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.title}
+                                value={item.title}
                                 id='title'
                                 className='titleTextbox'
                             />
@@ -144,12 +156,12 @@ class ListAnItem extends Component {
                             <select
                                 onChange={event => this.setState({
                                     item: {
-                                        ...this.state.item,
+                                        ...item,
                                         category: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.category}
+                                value={item.category}
                                 id='category'
                                 className='categorySelect'
                             >
@@ -161,17 +173,38 @@ class ListAnItem extends Component {
                         </div>
                         <br />
                         <div>
+                            <label htmlFor='condition' className='condition'>Condition</label>
+                            <select
+                                onChange={event => this.setState({
+                                    item: {
+                                        ...item,
+                                        condition: event.target.value
+                                    },
+                                    showServerResponse: false
+                                })}
+                                value={item.condition}
+                                id='condition'
+                                className='conditionSelect'
+                            >
+                                <option value='Choose condition'>Choose condition</option>
+                                {conditions.map(condition => (
+                                    <option key={condition} value={condition}>{condition}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <br />
+                        <div>
                             <label htmlFor='quantity' className='quantity'>Quantity</label>
                             <input
                                 type='text'
                                 onChange={event => this.setState({
                                     item: {
-                                        ...this.state.item,
+                                        ...item,
                                         quantity: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.quantity}
+                                value={item.quantity}
                                 id='quantity'
                                 className='quantityTextbox'
                             />
@@ -185,13 +218,13 @@ class ListAnItem extends Component {
                                     const price = event.target.value;
                                     this.setState({
                                         item: {
-                                            ...this.state.item, 
-                                            price: price.startsWith("$") ? price : "$" + price
+                                            ...item,
+                                            price: item.price.startsWith("$") ? price : "$" + price
                                         },
                                         showServerResponse: false
                                     })
                                 }}
-                                value={this.state.item.price}
+                                value={item.price}
                                 id='price'
                                 className='priceTextbox'
                             />
@@ -203,12 +236,12 @@ class ListAnItem extends Component {
                                 type='text'
                                 onChange={event => this.setState({
                                     item: {
-                                        ...this.state.item,
+                                        ...item,
                                         imageURL: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.imageURL}
+                                value={item.imageURL}
                                 id='imageURL'
                                 className='imageURLTextbox'
                             />
@@ -219,12 +252,12 @@ class ListAnItem extends Component {
                             <textarea
                                 onChange={event => this.setState({
                                     item: {
-                                        ...this.state.item,
+                                        ...item,
                                         description: event.target.value
                                     },
                                     showServerResponse: false
                                 })}
-                                value={this.state.item.description}
+                                value={item.description}
                                 id='description'
                                 className='descriptionTextarea'
                             />
@@ -241,6 +274,7 @@ class ListAnItem extends Component {
                             <div className='listAnItemErrors'>
                                 <p>{itemTitleError}</p>
                                 <p>{itemCategoryError}</p>
+                                <p>{itemConditionError}</p>
                                 <p>{itemQuantityError}</p>
                                 <p>{itemPriceError}</p>
                             </div>
@@ -252,6 +286,9 @@ class ListAnItem extends Component {
                                 </div>
                                 <div className='categoryContainer'>
                                     Category: {item.category !== 'Choose category' ? item.category : ''}
+                                </div>
+                                <div className='conditionContainer'>
+                                    Condition: {item.condition !== 'Choose condition' ? item.condition : ''}
                                 </div>
                                 <div className='quantityContainer'>
                                     Quantity: {item.quantity}

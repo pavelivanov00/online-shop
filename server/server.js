@@ -145,9 +145,13 @@ app.post('/home/updateAccounts', async (req, res) => {
 app.post('/home/saveItem', async (req, res) => {
     const { item } = req.body;
     const title = item.title;
-    const tag = item.tag;
-    const quantity = item.quantity;
-    const price = item.price;
+    const category = item.category;
+    const quantity = parseInt(item.quantity);
+
+    var price = item.price;
+    price = price.replace(/[^0-9]/g, '');
+    price = parseFloat(price); 
+
     const imageURL = item.imageURL;
     const description = item.description;
 
@@ -162,7 +166,7 @@ app.post('/home/saveItem', async (req, res) => {
         } else {
             const item = {
                 title,
-                tag,
+                category,
                 quantity,
                 price,
                 imageURL,
@@ -181,11 +185,23 @@ app.post('/home/saveItem', async (req, res) => {
 app.get('/home/fetchItems', async (req, res) => {
     try {
         let query = {};
-
         if (req.query.category) {
-            query['item.category'] = req.query.category
+            query['item.category'] = req.query.category;
         }
-        
+        if (req.query.minPrice && req.query.maxPrice) {
+            query['item.price'] = {
+                $gte: parseFloat(req.query.minPrice),
+                $lte: parseFloat(req.query.maxPrice)
+            };
+        } else if (req.query.minPrice) {
+            query['item.price'] = { $gte: parseFloat(req.query.minPrice) };
+        } else if (req.query.maxPrice) {
+            query['item.price'] = { $lte: parseFloat(req.query.maxPrice) };
+        }
+        if (req.query.condition) {
+            query['item.condition'] = req.query.condition;
+        }
+
         const items = await db.collection('items').find(query, { projection: { _id: 0 } }).toArray();
         res.json(items);
     } catch (error) {
