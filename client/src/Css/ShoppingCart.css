@@ -1,0 +1,11 @@
+.item {
+    display: flex;
+    flex-direction: row;
+    height: 20%;
+    width: 70%;
+}
+
+.itemImage {
+    max-height: 150px; 
+    max-width: 150px;
+}
