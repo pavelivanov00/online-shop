@@ -13,8 +13,8 @@ class ViewItems extends Component {
             fetchedItems: [],
             search: '',
             showCategories: false,
-            filterByCategory: '',
-            filterByCondition: '',
+            category: '',
+            condition: '',
             minPrice: '',
             maxPrice: '',
         }
@@ -38,8 +38,8 @@ class ViewItems extends Component {
 
     handleCategoryPick = async (event) => {
         const category = event.target.innerText;
-        this.setState({ 
-            filterByCategory: category,
+        this.setState({
+            category,
             showCategories: false
         });
         try {
@@ -53,12 +53,12 @@ class ViewItems extends Component {
     handleMinPriceChange = async (event) => {
         const minPrice = event.target.value;
         this.setState({ minPrice });
-        const { filterByCategory, maxPrice, filterByCondition } = this.state;
+        const { category, maxPrice, condition, search } = this.state;
 
         try {
             let url = `http://localhost:5000/home/fetchItems?`;
-            if (filterByCategory) {
-                url += `category=${filterByCategory}&`;
+            if (category) {
+                url += `category=${category}&`;
             }
             if (minPrice) {
                 url += `minPrice=${minPrice}&`;
@@ -66,8 +66,11 @@ class ViewItems extends Component {
             if (maxPrice) {
                 url += `maxPrice=${maxPrice}&`;
             }
-            if (filterByCondition) {
-                url += `filterByCondition=${filterByCondition}&`;
+            if (condition) {
+                url += `condition=${condition}&`;
+            }
+            if (search) {
+                url += `search=${search}&`;
             }
             const response = await axios.get(url);
             this.setState({ fetchedItems: response.data });
@@ -79,38 +82,12 @@ class ViewItems extends Component {
     handleMaxPriceChange = async (event) => {
         const maxPrice = event.target.value;
         this.setState({ maxPrice });
-        const { filterByCategory, minPrice, filterByCondition } = this.state;
+        const { category, minPrice, condition, search } = this.state;
 
         try {
             let url = `http://localhost:5000/home/fetchItems?`;
-            if (filterByCategory) {
-                url += `category=${filterByCategory}&`;
-            }
-            if (minPrice) {
-                url += `minPrice=${minPrice}&`;
-            }
-            if (maxPrice) {
-                url += `maxPrice=${maxPrice}&`;
-            }
-            if (filterByCondition) {
-                url += `filterByCondition=${filterByCondition}&`;
-            }
-            const response = await axios.get(url);
-            this.setState({ fetchedItems: response.data });
-        } catch (error) {
-            console.error('Error while fetching items:', error);
-        }
-    };
-
-    handleConditionChange = async (event) => {
-        const condition = event.target.value;
-        this.setState({ filterByCondition: condition });
-        const { filterByCategory, minPrice, maxPrice } = this.state;
-
-        try {
-            let url = `http://localhost:5000/home/fetchItems?`;
-            if (filterByCategory) {
-                url += `category=${filterByCategory}&`;
+            if (category) {
+                url += `category=${category}&`;
             }
             if (minPrice) {
                 url += `minPrice=${minPrice}&`;
@@ -121,6 +98,9 @@ class ViewItems extends Component {
             if (condition) {
                 url += `condition=${condition}&`;
             }
+            if (search) {
+                url += `search=${search}&`;
+            }
             const response = await axios.get(url);
             this.setState({ fetchedItems: response.data });
         } catch (error) {
@@ -128,8 +108,78 @@ class ViewItems extends Component {
         }
     };
 
+    handleConditionChange = async (event) => {
+        const condition = event.target.value;
+        this.setState({ condition });
+        const { category, minPrice, maxPrice, search } = this.state;
+
+        try {
+            let url = `http://localhost:5000/home/fetchItems?`;
+            if (category) {
+                url += `category=${category}&`;
+            }
+            if (minPrice) {
+                url += `minPrice=${minPrice}&`;
+            }
+            if (maxPrice) {
+                url += `maxPrice=${maxPrice}&`;
+            }
+            if (condition) {
+                url += `condition=${condition}&`;
+            }
+            if (search) {
+                url += `search=${search}&`;
+            }
+            const response = await axios.get(url);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
+
+    handleSearchbarChange = async (event) => {
+        const search = event.target.value;
+        this.setState({ search });
+
+        const { category, minPrice, maxPrice, condition } = this.state;
+
+        try {
+            let url = `http://localhost:5000/home/fetchItems?`;
+            if (category) {
+                url += `category=${category}&`;
+            }
+            if (minPrice) {
+                url += `minPrice=${minPrice}&`;
+            }
+            if (maxPrice) {
+                url += `maxPrice=${maxPrice}&`;
+            }
+            if (condition) {
+                url += `condition=${condition}&`;
+            }
+            if (search) {
+                url += `search=${search}&`;
+            }
+            const response = await axios.get(url);
+            this.setState({ fetchedItems: response.data });
+        } catch (error) {
+            console.error('Error while fetching items:', error);
+        }
+    };
+
+    handleClearFiltersClick = () => {
+        this.setState({
+            category: '',
+            minPrice: '',
+            maxPrice: '',
+            condition: '',
+            search: '',
+        });
+        this.fetchItems();
+    };
+
     render() {
-        const { viewItems, fetchedItems, search, filterByCondition, showCategories } = this.state;
+        const { viewItems, fetchedItems, search, condition, showCategories } = this.state;
 
         const categories = [
             'Electronics',
@@ -156,7 +206,7 @@ class ViewItems extends Component {
                     </div>
                     <input
                         type='text'
-                        onChange={event => this.setState({ search: event.target.value })}
+                        onChange={event => this.handleSearchbarChange(event)}
                         className='searchbar'
                         placeholder='Search'
                         value={search}
@@ -223,7 +273,7 @@ class ViewItems extends Component {
                                         <input
                                             type='radio'
                                             value='Brand new'
-                                            checked={filterByCondition === 'Brand new'}
+                                            checked={condition === 'Brand new'}
                                             onChange={event => this.handleConditionChange(event)}
                                         />
                                         Brand new
@@ -232,7 +282,7 @@ class ViewItems extends Component {
                                         <input
                                             type='radio'
                                             value='Unpacked'
-                                            checked={filterByCondition === 'Unpacked'}
+                                            checked={condition === 'Unpacked'}
                                             onChange={event => this.handleConditionChange(event)}
                                         />
                                         Unpacked
@@ -241,7 +291,7 @@ class ViewItems extends Component {
                                         <input
                                             type='radio'
                                             value='Damaged'
-                                            checked={filterByCondition === 'Damaged'}
+                                            checked={condition === 'Damaged'}
                                             onChange={event => this.handleConditionChange(event)}
                                         />
                                         Damaged
@@ -249,6 +299,12 @@ class ViewItems extends Component {
                                 </div>
                             </div>
                         }
+                        <button
+                            className='button clearFiltersButton'
+                            onClick={this.handleClearFiltersClick}
+                        >
+                            Clear filters
+                        </button>
                     </div>
                     <div className='itemsContainer'>
                         {fetchedItems.map((item, index) =>

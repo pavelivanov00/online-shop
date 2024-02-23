@@ -146,6 +146,7 @@ app.post('/home/saveItem', async (req, res) => {
     const { item } = req.body;
     const title = item.title;
     const category = item.category;
+    const condition = item.condition;
     const quantity = parseInt(item.quantity);
 
     var price = item.price;
@@ -167,6 +168,7 @@ app.post('/home/saveItem', async (req, res) => {
             const item = {
                 title,
                 category,
+                condition,
                 quantity,
                 price,
                 imageURL,
@@ -201,7 +203,10 @@ app.get('/home/fetchItems', async (req, res) => {
         if (req.query.condition) {
             query['item.condition'] = req.query.condition;
         }
-
+        if (req.query.search) {
+            query['item.title'] = { $regex: req.query.search, $options: 'i' };
+        }
+        
         const items = await db.collection('items').find(query, { projection: { _id: 0 } }).toArray();
         res.json(items);
     } catch (error) {
