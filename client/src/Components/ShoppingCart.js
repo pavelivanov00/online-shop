@@ -18,9 +18,12 @@ class ShoppingCart extends Component {
                 {showShoppingCart &&
                     <div>
                         {shoppingCart.map(item => (
-                            <div className='item'>
+                            <div className='itemInShoppingCart'>
                                 <div>
-                                    <img className='itemImage' src={item.item.imageURL} alt='text'></img>
+                                    <img
+                                        className='itemImageInShoppingCart'
+                                        src={item.item.imageURL}
+                                        alt='alt'></img>
                                 </div>
                                 <div className='itemTitle'>
                                     {item.item.title}
