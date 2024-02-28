@@ -14,22 +14,24 @@ class ShoppingCart extends Component {
     render() {
         const { showShoppingCart, shoppingCart } = this.state;
         return (
-            <div className='shoppingCart'>
+            <div className='ddd'>
                 {showShoppingCart &&
-                    <div>
+                    <div className='shoppingCart'>
                         {shoppingCart.map(item => (
                             <div className='itemInShoppingCart'>
-                                <div>
+                                <div className='itemImageContainerInShoppingCart'>
                                     <img
                                         className='itemImageInShoppingCart'
                                         src={item.item.imageURL}
                                         alt='alt'></img>
                                 </div>
-                                <div className='itemTitle'>
-                                    {item.item.title}
-                                </div>
-                                <div className='itemPrice'>
-                                    Price: {item.item.price}
+                                <div className='itemTitleAndPriceContainerInShoppingCart'>
+                                    <div className='itemTitleInShoppingCart'>
+                                        {item.item.title}
+                                    </div>
+                                    <div className='itemPriceInShoppingCart'>
+                                        Price: {item.item.price}
+                                    </div>
                                 </div>
                             </div>
                         )
