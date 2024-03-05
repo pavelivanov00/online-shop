@@ -151,7 +151,7 @@ app.post('/home/saveItem', async (req, res) => {
 
     var price = item.price;
     price = price.replace(/[^0-9]/g, '');
-    price = parseFloat(price); 
+    price = parseFloat(price);
 
     const imageURL = item.imageURL;
     const description = item.description;
@@ -184,6 +184,32 @@ app.post('/home/saveItem', async (req, res) => {
     }
 });
 
+app.post('/home/saveItemsInShoppingCart', async (req, res) => {
+    const account = req.body.email;
+    const shoppingCart = req.body.updatedCart;
+
+    try {
+        const existingAccount = await db.collection('shoppingCarts').findOne({
+            account
+        });
+
+        if (existingAccount) {
+            await db.collection('shoppingCarts').updateOne(
+                { account },
+                { $set: { shoppingCart: shoppingCart } }
+            );
+        } else {
+            await db.collection('shoppingCarts').insertOne({
+                account,
+                shoppingCart
+            });
+        }
+    } catch (error) {
+        console.error('Error updating shopping cart', error);
+        res.status(500).json({ error: 'Error updating shopping cart' });
+    }
+});
+
 app.get('/home/fetchItems', async (req, res) => {
     try {
         let query = {};
@@ -206,7 +232,7 @@ app.get('/home/fetchItems', async (req, res) => {
         if (req.query.search) {
             query['item.title'] = { $regex: req.query.search, $options: 'i' };
         }
-        
+
         const items = await db.collection('items').find(query, { projection: { _id: 0 } }).toArray();
         res.json(items);
     } catch (error) {
@@ -215,6 +241,34 @@ app.get('/home/fetchItems', async (req, res) => {
     }
 });
 
+app.get('/home/fetchItemsInShoppingCart', async (req, res) => {
+    try {
+        const email = req.query.email;
+
+        const items = await db.collection('shoppingCarts').find({ account: email }, { _id: 0, email: 0, shoppingCart: 1 }).toArray();
+        res.json(items);
+    } catch (error) {
+        console.error('Error retrieving items:', error);
+        res.status(500).json({ error: 'Failed to retrieve items' });
+    }
+});
+
+app.get('/home/fetchDetailedInformation', async (req, res) => {
+    try {
+        const titles = req.query.itemsTitles;
+
+        titles.map(title => console.log(title));
+
+        const items = await Promise.all(titles.map(title =>
+            db.collection('items').find({ 'item.title': title }, { projection: { _id: 0 } }).toArray()
+        ));
+
+        res.json(items);
+    } catch (error) {
+        console.error('Error retrieving items:', error);
+        res.status(500).json({ error: 'Failed to retrieve items' });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

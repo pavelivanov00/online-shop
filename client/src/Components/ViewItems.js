@@ -9,6 +9,9 @@ class ViewItems extends Component {
         super(props)
 
         this.state = {
+            username: this.props.username,
+            email: this.props.email,
+            role: this.props.role,
             showDashboard: this.props.showDashboard,
             viewItems: this.props.viewItems,
             fetchedItems: [],
@@ -182,8 +185,22 @@ class ViewItems extends Component {
     };
 
     handleAddToCartButtonClick = item => {
-        const updatedCart = [...this.state.shoppingCart, item];
+        const updatedCart = [...this.state.shoppingCart];
+        const existingItemIndex = updatedCart.findIndex(cartItem => cartItem.title === item.item.title);
+
+        if (existingItemIndex !== -1) updatedCart[existingItemIndex].count++;
+        else updatedCart.push({ title: item.item.title, count: 1 });
+
         this.setState({ shoppingCart: updatedCart });
+        try {
+            axios.post('http://localhost:5000/home/saveItemsInShoppingCart', {
+                email: this.state.email,
+                updatedCart
+            });
+        }
+        catch (error) {
+            console.error('Error adding item to shopping cart:', error);
+        }
     };
 
     handleShoppingCartClick = () => {
@@ -354,7 +371,9 @@ class ViewItems extends Component {
                 {
                     showShoppingCart &&
                     <ShoppingCart
-                        shoppingCart={this.state.shoppingCart}
+                        username={this.state.username}
+                        email={this.state.email}
+                        role={this.state.role}
                         showShoppingCart={showShoppingCart}
                         viewItems={viewItems}
                     />

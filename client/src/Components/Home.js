@@ -176,15 +176,18 @@ class Home extends Component {
                 }
                 {showListAnItem &&
                     <ListAnItem
-                        username={this.state.username}
-                        email={this.state.email}
-                        role={this.state.role}
+                        username={username}
+                        email={email}
+                        role={role}
                         showDashboard={showDashboard}
                         showListAnItem={showListAnItem}
                     />
                 }
                 {viewItems &&
                     <ViewItems
+                        username={username}
+                        email={email}
+                        role={role}
                         showDashboard={showDashboard}
                         viewItems={viewItems}
                     />
