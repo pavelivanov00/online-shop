@@ -186,24 +186,41 @@ app.post('/home/saveItem', async (req, res) => {
 
 app.post('/home/saveItemsInShoppingCart', async (req, res) => {
     const account = req.body.email;
-    const shoppingCart = req.body.updatedCart;
+    const cartItem = req.body.cartItem;
+    let cartItemArray = [];
+    cartItemArray.push(cartItem);
 
     try {
         const existingAccount = await db.collection('shoppingCarts').findOne({
             account
         });
 
+        const existingCartItem = await db.collection('shoppingCarts').findOne({
+            shoppingCart: { $elemMatch: { title: cartItem.title } }
+        });
+
         if (existingAccount) {
-            await db.collection('shoppingCarts').updateOne(
-                { account },
-                { $set: { shoppingCart: shoppingCart } }
+            if (existingCartItem) await db.collection('shoppingCarts').updateOne(
+                {
+                    $and: [
+                        { account },
+                        { shoppingCart: { $elemMatch: { title: cartItem.title } } }
+                    ]
+                },
+                {
+                    $inc: { 'shoppingCart.$.count': 1 }
+                }
             );
-        } else {
+            else
+                await db.collection('shoppingCarts').updateOne(
+                    { account },
+                    { $push: { shoppingCart: { $each: cartItemArray } } }
+                );
+        } else
             await db.collection('shoppingCarts').insertOne({
                 account,
-                shoppingCart
+                shoppingCart: cartItemArray
             });
-        }
     } catch (error) {
         console.error('Error updating shopping cart', error);
         res.status(500).json({ error: 'Error updating shopping cart' });

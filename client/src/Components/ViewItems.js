@@ -185,17 +185,12 @@ class ViewItems extends Component {
     };
 
     handleAddToCartButtonClick = item => {
-        const updatedCart = [...this.state.shoppingCart];
-        const existingItemIndex = updatedCart.findIndex(cartItem => cartItem.title === item.item.title);
+        const cartItem = { title: item.item.title, count: 1 };
 
-        if (existingItemIndex !== -1) updatedCart[existingItemIndex].count++;
-        else updatedCart.push({ title: item.item.title, count: 1 });
-
-        this.setState({ shoppingCart: updatedCart });
         try {
             axios.post('http://localhost:5000/home/saveItemsInShoppingCart', {
                 email: this.state.email,
-                updatedCart
+                cartItem
             });
         }
         catch (error) {

@@ -10,7 +10,8 @@ class ShoppingCart extends Component {
             email: this.props.email,
             viewItems: this.props.viewItems,
             showShoppingCart: this.props.showShoppingCart,
-            shoppingCart: []
+            shoppingCart: [],
+            itemCount: [],
         }
     }
     componentDidMount() {
@@ -30,6 +31,8 @@ class ShoppingCart extends Component {
             const fetchedItemsInArray = shoppingCartItems[0].shoppingCart;
 
             const itemsTitles = fetchedItemsInArray.map(item => item.title);
+            const itemCount = fetchedItemsInArray.map(item => item.count);
+            this.setState({ itemCount });
 
             const detailedInformation = await axios.get('http://localhost:5000/home/fetchDetailedInformation', {
                 params: {
@@ -46,29 +49,69 @@ class ShoppingCart extends Component {
         }
     };
 
+    incrementItemCount = index => {
+        const updatedItemCount = [...this.state.itemCount];
+
+        updatedItemCount[index]++;
+        this.setState({ itemCount: updatedItemCount });
+        console.log(updatedItemCount);
+    };
+
+    decrementItemCount = index => {
+        const updatedItemCount = [...this.state.itemCount];
+
+        if (updatedItemCount[index] > 0) {
+            updatedItemCount[index]--;
+
+            this.setState({ itemCount: updatedItemCount });
+        }
+    };
+
+
+
     render() {
-        const { showShoppingCart, shoppingCart } = this.state;
+        const { showShoppingCart, shoppingCart, itemCount } = this.state;
         return (
             <div>
                 {showShoppingCart &&
                     <div className='shoppingCart'>
                         {shoppingCart.map((item, index) => (
-                        <div key={index} className='itemInShoppingCart'>
-                            <div className='itemImageContainerInShoppingCart'>
-                                <img
-                                    className='itemImageInShoppingCart'
-                                    src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
-                                    alt='alt'></img>
-                            </div>
-                            <div className='itemTitleAndPriceContainerInShoppingCart'>
-                                <div className='itemTitleInShoppingCart'>
-                                    {item.title}
+                            <div key={index} className='itemInShoppingCart'>
+                                <div className='itemImageContainerInShoppingCart'>
+                                    <img
+                                        className='itemImageInShoppingCart'
+                                        src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
+                                        alt='alt'></img>
                                 </div>
-                                <div className='itemPriceInShoppingCart'>
-                                    Price: {item.price}
+                                <div className='itemTitleAndPriceContainerInShoppingCart'>
+                                    <div className='itemTitleInShoppingCart'>
+                                        {item.title}
+                                    </div>
+
+                                    <div className='decrementButtonDiv'>
+                                        <button
+                                            className='decrementButton'
+                                            onClick={() => this.decrementItemCount(index)}
+                                        >
+                                            -
+                                        </button>
+                                    </div>
+                                    <div className='itemCountInShoppingCart'>
+                                        Count: {this.state.itemCount[index]}
+                                    </div>
+                                    <div className='incrementButtonDiv'>
+                                        <button
+                                            className='incrementButton'
+                                            onClick={() => this.incrementItemCount(index)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div className='itemPriceInShoppingCart'>
+                                        Price: {item.price * itemCount[index]}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         )
                         )}
                     </div>

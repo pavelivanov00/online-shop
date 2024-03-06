@@ -35,6 +35,7 @@
     justify-content: space-between;
     width: 83%;
 }
+
 .itemTitleInShoppingCart {
     display: flex;
     flex-wrap: wrap;
@@ -44,10 +45,33 @@
     font-size: 130%;
 }
 
+.itemCountInShoppingCart {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    font-size: 120%;
+}
+
 .itemPriceInShoppingCart {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     justify-content: flex-end;
     font-size: 120%;
+}
+
+.incrementButton,
+.decrementButton {
+    width: 24px;
+    height: 24px;
+    font-size: 120%;
+    background-color: rgb(65, 65, 65);
+    color: rgb(255, 255, 255);
+    border: none;
+}
+
+.incrementButtonDiv,
+.decrementButtonDiv {
+    display: flex;
+    align-items: center;
 }
