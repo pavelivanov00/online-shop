@@ -7,57 +7,66 @@
 .itemInShoppingCart {
     display: flex;
     flex-direction: row;
-    height: 20%;
+    height: 130px;
     width: 70%;
     margin-bottom: 2%;
-    border: 4px solid rgb(133, 193, 253);
+    border: 4px solid rgb(138, 138, 138);
     position: relative;
 }
 
 .itemImageContainerInShoppingCart {
-    width: 15%;
-    max-width: 150px;
-    height: 100%;
-    max-height: 150px;
     display: flex;
     justify-content: center;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin: 4px;
+    width: 15%;
+    overflow: hidden;
 }
 
 .itemImageInShoppingCart {
-    max-height: 130px;
-    max-width: 130px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.itemTitleAndPriceContainerInShoppingCart {
+.itemInfoContainerInShoppingCart {
     display: flex;
-    justify-content: space-between;
-    width: 83%;
+    width: 87%;
 }
 
 .itemTitleInShoppingCart {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
-    max-width: 82%;
+    width: 100%;
     margin-left: 1%;
     font-size: 130%;
 }
 
-.itemCountInShoppingCart {
+.itemCountAndPriceInShoppingCart {
     display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    font-size: 120%;
+    width: 30%;
+    margin-left: 6%
 }
 
-.itemPriceInShoppingCart {
+
+.countContainerInShoppingCart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 20%;
+    width: 20%;
+}
+
+.itemCountUpperRow {
     display: flex;
     flex-wrap: wrap;
     align-content: center;
-    justify-content: flex-end;
     font-size: 120%;
+    margin-bottom: 20%;
+}
+
+.itemCountBottomRow {
+    display: flex;
 }
 
 .incrementButton,
@@ -68,10 +77,26 @@
     background-color: rgb(65, 65, 65);
     color: rgb(255, 255, 255);
     border: none;
+    border-radius: 0.3vmax;
+    cursor: pointer;
 }
 
 .incrementButtonDiv,
 .decrementButtonDiv {
     display: flex;
     align-items: center;
+}
+
+.countValue {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.itemPriceInShoppingCart {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    width: 100%;
+    font-size: 120%;
+    margin-left: 8%;
 }

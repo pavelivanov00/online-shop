@@ -67,8 +67,6 @@ class ShoppingCart extends Component {
         }
     };
 
-
-
     render() {
         const { showShoppingCart, shoppingCart, itemCount } = this.state;
         return (
@@ -81,34 +79,42 @@ class ShoppingCart extends Component {
                                     <img
                                         className='itemImageInShoppingCart'
                                         src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
-                                        alt='alt'></img>
+                                        alt='preview'></img>
                                 </div>
-                                <div className='itemTitleAndPriceContainerInShoppingCart'>
+                                <div className='itemInfoContainerInShoppingCart'>
                                     <div className='itemTitleInShoppingCart'>
                                         {item.title}
                                     </div>
-
-                                    <div className='decrementButtonDiv'>
-                                        <button
-                                            className='decrementButton'
-                                            onClick={() => this.decrementItemCount(index)}
-                                        >
-                                            -
-                                        </button>
-                                    </div>
-                                    <div className='itemCountInShoppingCart'>
-                                        Count: {this.state.itemCount[index]}
-                                    </div>
-                                    <div className='incrementButtonDiv'>
-                                        <button
-                                            className='incrementButton'
-                                            onClick={() => this.incrementItemCount(index)}
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <div className='itemPriceInShoppingCart'>
-                                        Price: {item.price * itemCount[index]}
+                                    <div className='itemCountAndPriceInShoppingCart'>
+                                        <div className='countContainerInShoppingCart'>
+                                            <div className='itemCountUpperRow'>
+                                                Count:
+                                            </div>
+                                            <div className='itemCountBottomRow'>
+                                                <div className='decrementButtonDiv'>
+                                                    <button
+                                                        className='decrementButton'
+                                                        onClick={() => this.decrementItemCount(index)}
+                                                    >
+                                                        -
+                                                    </button>
+                                                </div>
+                                                <div className='countValue'>
+                                                    {this.state.itemCount[index]}
+                                                </div>
+                                                <div className='incrementButtonDiv'>
+                                                    <button
+                                                        className='incrementButton'
+                                                        onClick={() => this.incrementItemCount(index)}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='itemPriceInShoppingCart'>
+                                            Price: {item.price * itemCount[index]}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
