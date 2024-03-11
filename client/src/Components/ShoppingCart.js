@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../Css/ShoppingCart.css';
+import ViewItems from './ViewItems';
 
 class ShoppingCart extends Component {
     constructor(props) {
@@ -12,6 +13,7 @@ class ShoppingCart extends Component {
             showShoppingCart: this.props.showShoppingCart,
             shoppingCart: [],
             itemCount: [],
+            finalPrice: '',
         }
     }
     componentDidMount() {
@@ -54,7 +56,6 @@ class ShoppingCart extends Component {
 
         updatedItemCount[index]++;
         this.setState({ itemCount: updatedItemCount });
-        console.log(updatedItemCount);
     };
 
     decrementItemCount = index => {
@@ -67,12 +68,33 @@ class ShoppingCart extends Component {
         }
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        const { shoppingCart, itemCount } = this.state;
+        if (prevState.shoppingCart !== shoppingCart || prevState.itemCount !== itemCount) {
+            const finalPrice = shoppingCart.reduce((sum, item, index) => sum + itemCount[index] * item.price, 0);
+            this.setState({ finalPrice });
+        }
+    };
+
+    handleGoBackButtonClick = () => {
+        this.setState({
+            viewItems: true,
+            showShoppingCart: false
+        })
+    };
+
     render() {
-        const { showShoppingCart, shoppingCart, itemCount } = this.state;
+        const { showShoppingCart, shoppingCart, itemCount, finalPrice, viewItems } = this.state;
         return (
             <div>
                 {showShoppingCart &&
                     <div className='shoppingCart'>
+                        <button
+                            className='goBackButtonInShoppingCart'
+                            onClick={this.handleGoBackButtonClick}
+                        >
+                            Go back
+                        </button>
                         {shoppingCart.map((item, index) => (
                             <div key={index} className='itemInShoppingCart'>
                                 <div className='itemImageContainerInShoppingCart'>
@@ -100,7 +122,7 @@ class ShoppingCart extends Component {
                                                     </button>
                                                 </div>
                                                 <div className='countValue'>
-                                                    {this.state.itemCount[index]}
+                                                    {itemCount[index]}
                                                 </div>
                                                 <div className='incrementButtonDiv'>
                                                     <button
@@ -113,14 +135,27 @@ class ShoppingCart extends Component {
                                             </div>
                                         </div>
                                         <div className='itemPriceInShoppingCart'>
-                                            Price: {item.price * itemCount[index]}
+                                            Price: ${item.price * itemCount[index]}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         )
                         )}
+                        <div className='finalPrice'>
+                            Final Price: ${finalPrice}
+                        </div>
                     </div>
+                }
+                {
+                    viewItems &&
+                    <ViewItems
+                        username={this.state.username}
+                        email={this.state.email}
+                        role={this.state.role}
+                        showShoppingCart={showShoppingCart}
+                        viewItems={viewItems}
+                    />
                 }
             </div>
         )
