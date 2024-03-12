@@ -287,6 +287,20 @@ app.get('/home/fetchDetailedInformation', async (req, res) => {
     }
 });
 
+app.post('/home/saveOrder', async (req, res) => {
+    const order = req.body.order;
+
+    try {
+        await db.collection('orders').insertOne({
+            order
+        });
+    } catch (error) {
+        console.error('Error while placing order', error);
+        res.status(500).json({ error: 'Error while placing order' });
+    }
+    res.json('The order was successful');
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

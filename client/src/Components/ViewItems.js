@@ -223,7 +223,7 @@ class ViewItems extends Component {
             <div>
                 {viewItems &&
                     <div>
-                        <div className='navigation'>
+                        <div className='topPanel'>
                             <div>
                                 <button
                                     className='button toggleCategoriesButton'
@@ -243,19 +243,19 @@ class ViewItems extends Component {
                             <div className='rightside'>
                                 <button
                                     onClick={this.handleFavouritesClick}
-                                    className='favouriteItems marginLeft button'
+                                    className='marginLeft button'
                                 >
                                     Favourites
                                 </button>
                                 <button
                                     onClick={this.handleShoppingCartClick}
-                                    className='shoppingCart marginLeft button'
+                                    className='marginLeft button'
                                 >
                                     Shopping cart
                                 </button>
                                 <button
                                     onClick={this.handleUserInfoClick}
-                                    className='myProfile marginLeft button'
+                                    className='marginLeft button'
                                 >
                                     My profile
                                 </button>

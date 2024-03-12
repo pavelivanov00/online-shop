@@ -14,6 +14,7 @@ class ShoppingCart extends Component {
             shoppingCart: [],
             itemCount: [],
             finalPrice: '',
+            orderResponse: '',
         }
     }
     componentDidMount() {
@@ -83,68 +84,102 @@ class ShoppingCart extends Component {
         })
     };
 
+    handleOrderClick = async () => {
+        const { itemCount, shoppingCart, finalPrice, email } = this.state;
+        const order = {
+            email: email,
+            shoppingCart: shoppingCart,
+            finalPrice: finalPrice
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5000/home/saveOrder', {
+                order
+            });
+            const orderResponse = response.data;
+            this.setState({ orderResponse });
+        }
+        catch (error) {
+            console.error('Error while placing order:', error);
+        }
+    };
+
     render() {
-        const { showShoppingCart, shoppingCart, itemCount, finalPrice, viewItems } = this.state;
+        const { showShoppingCart, shoppingCart, itemCount, finalPrice, viewItems, orderResponse } = this.state;
         return (
             <div>
                 {showShoppingCart &&
-                    <div className='shoppingCart'>
+                    <div className='shoppingCartComponent'>
                         <button
                             className='goBackButtonInShoppingCart'
                             onClick={this.handleGoBackButtonClick}
                         >
                             Go back
                         </button>
-                        {shoppingCart.map((item, index) => (
-                            <div key={index} className='itemInShoppingCart'>
-                                <div className='itemImageContainerInShoppingCart'>
-                                    <img
-                                        className='itemImageInShoppingCart'
-                                        src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
-                                        alt='preview'></img>
-                                </div>
-                                <div className='itemInfoContainerInShoppingCart'>
-                                    <div className='itemTitleInShoppingCart'>
-                                        {item.title}
+                        <div className='shoppingCart'>
+                            {shoppingCart.map((item, index) => (
+                                <div key={index} className='itemInShoppingCart'>
+                                    <div className='itemImageContainerInShoppingCart'>
+                                        <img
+                                            className='itemImageInShoppingCart'
+                                            src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
+                                            alt='preview'></img>
                                     </div>
-                                    <div className='itemCountAndPriceInShoppingCart'>
-                                        <div className='countContainerInShoppingCart'>
-                                            <div className='itemCountUpperRow'>
-                                                Count:
+                                    <div className='itemInfoContainerInShoppingCart'>
+                                        <div className='itemTitleInShoppingCart'>
+                                            {item.title}
+                                        </div>
+                                        <div className='itemCountAndPriceInShoppingCart'>
+                                            <div className='countContainerInShoppingCart'>
+                                                <div className='itemCountUpperRow'>
+                                                    Count:
+                                                </div>
+                                                <div className='itemCountBottomRow'>
+                                                    <div className='decrementButtonDiv'>
+                                                        <button
+                                                            className='decrementButton'
+                                                            onClick={() => this.decrementItemCount(index)}
+                                                        >
+                                                            -
+                                                        </button>
+                                                    </div>
+                                                    <div className='countValue'>
+                                                        {itemCount[index]}
+                                                    </div>
+                                                    <div className='incrementButtonDiv'>
+                                                        <button
+                                                            className='incrementButton'
+                                                            onClick={() => this.incrementItemCount(index)}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className='itemCountBottomRow'>
-                                                <div className='decrementButtonDiv'>
-                                                    <button
-                                                        className='decrementButton'
-                                                        onClick={() => this.decrementItemCount(index)}
-                                                    >
-                                                        -
-                                                    </button>
-                                                </div>
-                                                <div className='countValue'>
-                                                    {itemCount[index]}
-                                                </div>
-                                                <div className='incrementButtonDiv'>
-                                                    <button
-                                                        className='incrementButton'
-                                                        onClick={() => this.incrementItemCount(index)}
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
+                                            <div className='itemPriceInShoppingCart'>
+                                                Price: ${item.price * itemCount[index]}
                                             </div>
                                         </div>
-                                        <div className='itemPriceInShoppingCart'>
-                                            Price: ${item.price * itemCount[index]}
-                                        </div>
                                     </div>
                                 </div>
+                            )
+                            )}
+
+                            <div className='finalPrice'>
+                                Final Price: ${finalPrice}
                             </div>
-                        )
-                        )}
-                        <div className='finalPrice'>
-                            Final Price: ${finalPrice}
                         </div>
+                        <button
+                            className='orderButton'
+                            onClick={this.handleOrderClick}
+                        >
+                            Order now
+                        </button>
+                        {orderResponse &&
+                            <div className={`orderResponse ${orderResponse !== 'The order was successful' ? 'colorRed' : ''}`}>
+                                {orderResponse}
+                            </div>
+                        }
                     </div>
                 }
                 {
