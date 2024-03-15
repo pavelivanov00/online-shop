@@ -187,6 +187,7 @@ app.post('/home/saveItem', async (req, res) => {
 app.post('/home/saveItemsInShoppingCart', async (req, res) => {
     const account = req.body.email;
     const cartItem = req.body.cartItem;
+    
     let cartItemArray = [];
     cartItemArray.push(cartItem);
 
@@ -274,8 +275,6 @@ app.get('/home/fetchDetailedInformation', async (req, res) => {
     try {
         const titles = req.query.itemsTitles;
 
-        titles.map(title => console.log(title));
-
         const items = await Promise.all(titles.map(title =>
             db.collection('items').find({ 'item.title': title }, { projection: { _id: 0 } }).toArray()
         ));
@@ -284,6 +283,20 @@ app.get('/home/fetchDetailedInformation', async (req, res) => {
     } catch (error) {
         console.error('Error retrieving items:', error);
         res.status(500).json({ error: 'Failed to retrieve items' });
+    }
+});
+
+app.post('/home/removeItemFromShoppingCart', async (req, res) => {
+    const itemToBeRemoved = req.body.itemToBeRemoved;
+
+    try {
+        await db.collection('shoppingCarts').updateOne(
+            { 'shoppingCart.title': itemToBeRemoved },
+            { $pull: { 'shoppingCart': { title: itemToBeRemoved } } }
+        );
+    } catch (error) {
+        console.error('Error while removing item', error);
+        res.status(500).json({ error: 'Error while removing item' });
     }
 });
 

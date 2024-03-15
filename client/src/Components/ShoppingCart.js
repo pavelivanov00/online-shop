@@ -11,7 +11,7 @@ class ShoppingCart extends Component {
             email: this.props.email,
             viewItems: this.props.viewItems,
             showShoppingCart: this.props.showShoppingCart,
-            shoppingCart: [],
+            shoppingCartDetailed: [],
             itemCount: [],
             finalPrice: '',
             orderResponse: '',
@@ -29,24 +29,23 @@ class ShoppingCart extends Component {
                     email
                 }
             });
-            const shoppingCartItems = response.data;
 
-            const fetchedItemsInArray = shoppingCartItems[0].shoppingCart;
+            const fetchedItemsArray = response.data[0].shoppingCart;
 
-            const itemsTitles = fetchedItemsInArray.map(item => item.title);
-            const itemCount = fetchedItemsInArray.map(item => item.count);
-            this.setState({ itemCount });
+            const itemsTitles = fetchedItemsArray.map(item => item.title);
+            const itemCount = fetchedItemsArray.map(item => item.count);
 
-            const detailedInformation = await axios.get('http://localhost:5000/home/fetchDetailedInformation', {
+            this.setState({ itemCount: itemCount });
+
+            const detailedResponse = await axios.get('http://localhost:5000/home/fetchDetailedInformation', {
                 params: {
-                    itemsTitles: itemsTitles
+                    itemsTitles
                 }
             });
 
-            const detailedInformationArray = detailedInformation.data;
-            const shoppingCart = detailedInformationArray.map(cartItem => cartItem[0].item);
+            const shoppingCartDetailed = detailedResponse.data.map(cartItem => cartItem[0].item);
 
-            this.setState({ shoppingCart });
+            this.setState({ shoppingCartDetailed });
         } catch (error) {
             console.error('Error while fetching items:', error);
         }
@@ -70,9 +69,9 @@ class ShoppingCart extends Component {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        const { shoppingCart, itemCount } = this.state;
-        if (prevState.shoppingCart !== shoppingCart || prevState.itemCount !== itemCount) {
-            const finalPrice = shoppingCart.reduce((sum, item, index) => sum + itemCount[index] * item.price, 0);
+        const { shoppingCartDetailed, itemCount } = this.state;
+        if (prevState.shoppingCartDetailed !== shoppingCartDetailed || prevState.itemCount !== itemCount) {
+            const finalPrice = shoppingCartDetailed.reduce((sum, item, index) => sum + itemCount[index] * item.price, 0);
             this.setState({ finalPrice });
         }
     };
@@ -84,11 +83,49 @@ class ShoppingCart extends Component {
         })
     };
 
+    handleRemoveItem = async (index) => {
+        const { shoppingCartDetailed, itemCount } = this.state;
+
+        const updatedShoppingCart = [...shoppingCartDetailed];
+        const updatedItemCount = [...itemCount];
+
+        const itemToBeRemoved = updatedShoppingCart[index].title;
+
+        updatedShoppingCart.splice(index, 1);
+        updatedItemCount.splice(index, 1);
+        this.setState({
+            shoppingCartDetailed: updatedShoppingCart,
+            itemCount: updatedItemCount
+        });
+
+        try {
+            await axios.post('http://localhost:5000/home/removeItemFromShoppingCart', {
+                itemToBeRemoved
+            });
+        }
+        catch (error) {
+            console.error('Error while removing item:', error);
+        }
+    };
+
     handleOrderClick = async () => {
-        const { itemCount, shoppingCart, finalPrice, email } = this.state;
+        const { itemCount, shoppingCartDetailed, finalPrice, email } = this.state;
+
+        if (itemCount.length !== shoppingCartDetailed.length) {
+            throw new Error('Arrays must have the same length.');
+        }
+
+        const items = shoppingCartDetailed.map((item, index) => {
+            return {
+                itemCount: itemCount[index],
+                itemTitle: item.title,
+                price: item.price * itemCount[index]
+            };
+        });
+
         const order = {
             email: email,
-            shoppingCart: shoppingCart,
+            shoppingCart: items,
             finalPrice: finalPrice
         }
 
@@ -105,7 +142,7 @@ class ShoppingCart extends Component {
     };
 
     render() {
-        const { showShoppingCart, shoppingCart, itemCount, finalPrice, viewItems, orderResponse } = this.state;
+        const { showShoppingCart, shoppingCartDetailed, itemCount, finalPrice, viewItems, orderResponse } = this.state;
         return (
             <div>
                 {showShoppingCart &&
@@ -117,48 +154,49 @@ class ShoppingCart extends Component {
                             Go back
                         </button>
                         <div className='shoppingCart'>
-                            {shoppingCart.map((item, index) => (
+                            {shoppingCartDetailed.map((item, index) => (
                                 <div key={index} className='itemInShoppingCart'>
                                     <div className='itemImageContainerInShoppingCart'>
                                         <img
                                             className='itemImageInShoppingCart'
                                             src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
-                                            alt='preview'></img>
+                                            alt='preview'>
+                                        </img>
                                     </div>
                                     <div className='itemInfoContainerInShoppingCart'>
                                         <div className='itemTitleInShoppingCart'>
                                             {item.title}
                                         </div>
                                         <div className='itemCountAndPriceInShoppingCart'>
-                                            <div className='countContainerInShoppingCart'>
-                                                <div className='itemCountUpperRow'>
-                                                    Count:
-                                                </div>
-                                                <div className='itemCountBottomRow'>
-                                                    <div className='decrementButtonDiv'>
-                                                        <button
-                                                            className='decrementButton'
-                                                            onClick={() => this.decrementItemCount(index)}
-                                                        >
-                                                            -
-                                                        </button>
-                                                    </div>
-                                                    <div className='countValue'>
-                                                        {itemCount[index]}
-                                                    </div>
-                                                    <div className='incrementButtonDiv'>
-                                                        <button
-                                                            className='incrementButton'
-                                                            onClick={() => this.incrementItemCount(index)}
-                                                        >
-                                                            +
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div className='itemPriceInShoppingCart'>
                                                 Price: ${item.price * itemCount[index]}
                                             </div>
+                                            <br />
+                                            <div className='itemCountContainer'>
+                                                <button
+                                                    className='decrementButton'
+                                                    onClick={() => this.decrementItemCount(index)}
+                                                >
+                                                    -
+                                                </button>
+                                                <div className='countValue'>
+                                                    {itemCount[index]}
+                                                </div>
+                                                <button
+                                                    className='incrementButton'
+                                                    onClick={() => this.incrementItemCount(index)}
+                                                >
+                                                    +
+                                                </button>
+                                            </div>
+                                            <br />
+                                            <button
+                                                className='removeItemFromShoppingCart'
+                                                onClick={() => this.handleRemoveItem(index)}
+                                            >
+
+                                                Remove
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

@@ -2,7 +2,7 @@
     display: flex;
     min-width: 1000px;
     min-height: 600px;
-    background-color: rgba(138, 226, 255, 0.234);
+    background-color: rgba(182, 182, 182, 0.345);
 }
 
 .itemsContainer {
@@ -55,7 +55,7 @@
 .topPanel {
     display: flex;
     padding-bottom: 0.5%;
-    background-color: rgba(138, 226, 255, 0.234);
+    background-color: rgba(182, 182, 182, 0.658);
 }
 
 .searchbar {

@@ -184,11 +184,11 @@ class ViewItems extends Component {
         this.fetchItems();
     };
 
-    handleAddToCartButtonClick = item => {
+    handleAddToCartButtonClick = async (item) => {
         const cartItem = { title: item.item.title, count: 1 };
 
         try {
-            axios.post('http://localhost:5000/home/saveItemsInShoppingCart', {
+            await axios.post('http://localhost:5000/home/saveItemsInShoppingCart', {
                 email: this.state.email,
                 cartItem
             });
