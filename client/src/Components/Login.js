@@ -6,7 +6,7 @@ import '../Css/Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [successfulLogin, setSuccessfulLogin] = useState();
+  const [loginStatus, setloginStatus] = useState();
   const [response, setResponse] = useState({});
 
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Login = () => {
       setResponse(result);
 
       if (result.data.status === 'Login successful') {
-        setSuccessfulLogin(true);
+        setloginStatus(true);
         navigate('home', {
           state: {
             email: result.data.email,
@@ -30,7 +30,7 @@ const Login = () => {
         });
       }
       else {
-        setSuccessfulLogin(false);
+        setloginStatus(false);
       }
     }
     catch (error) {
@@ -54,11 +54,11 @@ const Login = () => {
       <button onClick={loginHandler} className='loginButton'>Log in</button>
 
       <div>
-        {successfulLogin ? (
+        {loginStatus ?
           <p>{response.data && response.data.status}</p>
-        ) : (
-          <p className="invalidCredentials">{response.data && response.data.status}</p>
-        )}
+          :
+          <p className="invalidCredentials">{response.data}</p>
+        }
       </div>
 
       <p className='registerHere'>
