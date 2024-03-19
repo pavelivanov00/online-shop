@@ -108,9 +108,17 @@ class Home extends Component {
             serverResponseUpdateAccount, showDashboard, showListAnItem, viewItems } = this.state;
 
         return (
-            <div className='mainContainer'>
-                {showDashboard &&
-                    <div>
+            <div>
+                {role === 'customer' &&
+                    <ViewItems
+                        username={username}
+                        email={email}
+                        role={role}
+                        viewItems={true}
+                    />
+                }
+                {(showDashboard && role !== 'customer') &&
+                    <div className='administrationDashboard'>
                         <div className='userInfo'>
                             <p>username: {username}</p>
                             <p>email: {email}</p>
@@ -192,6 +200,7 @@ class Home extends Component {
                         viewItems={viewItems}
                     />
                 }
+
             </div>
         )
     }
