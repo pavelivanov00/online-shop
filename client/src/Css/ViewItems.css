@@ -33,7 +33,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgba(0, 0, 0, 0.593);
 }
 
 .adjustImage {
@@ -69,7 +69,8 @@ body {
 }
 
 .searchbar {
-    width: 25%;
+    width: 40%;
+    min-width: 250px;
     height: 22px;
     margin-left: 5%;
     border-radius: 8px;
@@ -102,7 +103,9 @@ body {
     -webkit-line-clamp: 2;
 }
 
-.button {
+.button,
+.logOutButton,
+.backToDashboardButton {
     background-color: rgba(56, 56, 56, 0.971);
     cursor: pointer;
     color: rgb(255, 255, 255);
@@ -113,7 +116,23 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.button:hover {
+.logOutButton {
+    text-decoration: none;
+}
+
+.backToDashboardButton {
+    padding: 2% 7%;
+    white-space: nowrap;
+}
+
+.middle {
+    margin-left:15%;
+    text-align: center;
+}
+
+.button:hover,
+.logOutButton:hover,
+.backToDashboardButton:hover {
     background-color: rgb(35, 35, 35);
 }
 

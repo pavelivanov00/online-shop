@@ -153,60 +153,65 @@ class ShoppingCart extends Component {
                         >
                             Go back
                         </button>
-                        <div className='shoppingCart'>
-                            {shoppingCartDetailed.map((item, index) => (
-                                <div key={index} className='itemInShoppingCart'>
-                                    <div className='itemImageContainerInShoppingCart'>
-                                        <img
-                                            className='itemImageInShoppingCart'
-                                            src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
-                                            alt='preview'>
-                                        </img>
-                                    </div>
-                                    <div className='itemInfoContainerInShoppingCart'>
-                                        <div className='itemTitleInShoppingCart'>
-                                            {item.title}
+
+                        {shoppingCartDetailed.length === 0 ?
+                            (<div className='emptyShoppingCart'>Your shopping cart is empty</div>)
+                            :
+                            (<div className='shoppingCart'>
+                                {shoppingCartDetailed.map((item, index) => (
+                                    <div key={index} className='itemInShoppingCart'>
+                                        <div className='itemImageContainerInShoppingCart'>
+                                            <img
+                                                className='itemImageInShoppingCart'
+                                                src={item.imageURL ? item.imageURL : 'https://i.imgur.com/elj4mNd.png'}
+                                                alt='preview'>
+                                            </img>
                                         </div>
-                                        <div className='itemCountAndPriceInShoppingCart'>
-                                            <div className='itemPriceInShoppingCart'>
-                                                Price: ${item.price * itemCount[index]}
+                                        <div className='itemInfoContainerInShoppingCart'>
+                                            <div className='itemTitleInShoppingCart'>
+                                                {item.title}
                                             </div>
-                                            <br />
-                                            <div className='itemCountContainer'>
-                                                <button
-                                                    className='decrementButton'
-                                                    onClick={() => this.decrementItemCount(index)}
-                                                >
-                                                    -
-                                                </button>
-                                                <div className='countValue'>
-                                                    {itemCount[index]}
+                                            <div className='itemCountAndPriceInShoppingCart'>
+                                                <div className='itemPriceInShoppingCart'>
+                                                    Price: ${item.price * itemCount[index]}
                                                 </div>
+                                                <br />
+                                                <div className='itemCountContainer'>
+                                                    <button
+                                                        className='decrementButton'
+                                                        onClick={() => this.decrementItemCount(index)}
+                                                    >
+                                                        -
+                                                    </button>
+                                                    <div className='countValue'>
+                                                        {itemCount[index]}
+                                                    </div>
+                                                    <button
+                                                        className='incrementButton'
+                                                        onClick={() => this.incrementItemCount(index)}
+                                                    >
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <br />
                                                 <button
-                                                    className='incrementButton'
-                                                    onClick={() => this.incrementItemCount(index)}
+                                                    className='removeItemFromShoppingCart'
+                                                    onClick={() => this.handleRemoveItem(index)}
                                                 >
-                                                    +
+                                                    Remove
                                                 </button>
                                             </div>
-                                            <br />
-                                            <button
-                                                className='removeItemFromShoppingCart'
-                                                onClick={() => this.handleRemoveItem(index)}
-                                            >
-
-                                                Remove
-                                            </button>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                            )}
-
-                            <div className='finalPrice'>
-                                Final Price: ${finalPrice}
+                                )
+                                )
+                                }
                             </div>
-                        </div>
+                            )
+                        }
+
+
+
                         <button
                             className='orderButton'
                             onClick={this.handleOrderClick}

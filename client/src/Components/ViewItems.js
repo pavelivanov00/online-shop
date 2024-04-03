@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Home from './Home';
 import ShoppingCart from './ShoppingCart';
+import ShowUserInfo from './ShowUserInfo';
 import '../Css/ViewItems.css';
+
 
 class ViewItems extends Component {
     constructor(props) {
@@ -23,6 +26,7 @@ class ViewItems extends Component {
             maxPrice: '',
             shoppingCart: [],
             showShoppingCart: false,
+            showUserInfo: false
         }
     }
     componentDidMount() {
@@ -205,8 +209,23 @@ class ViewItems extends Component {
         })
     };
 
+    handleGoBackToDashboard = () => {
+        this.setState({
+            viewItems: false,
+            showDashboard: true
+        })
+    };
+
+    handleUserInfoClick = () => {
+        this.setState({
+            viewItems: false,
+            showUserInfo: true
+        })
+
+    };
     render() {
-        const { viewItems, fetchedItems, search, condition, showCategories, showShoppingCart } = this.state;
+        const { viewItems, fetchedItems, search, condition, role,
+            showCategories, showShoppingCart, showDashboard, showUserInfo } = this.state;
 
         const categories = [
             'Electronics',
@@ -222,8 +241,8 @@ class ViewItems extends Component {
         return (
             <div>
                 {viewItems &&
-                    <div className='viewItemsMainContainer'>
-                        <div className='filtersContainer'>
+                    <div>
+                        <div className='topPanel'>
                             <div>
                                 <button
                                     className='button toggleCategoriesButton'
@@ -232,107 +251,121 @@ class ViewItems extends Component {
                                     Categories
                                 </button>
                             </div>
-                            {showCategories ?
-                                <div className='categories'>
-                                    {categories.map((category, index) =>
-                                        <button
-                                            key={index}
-                                            className='categoryFilter button'
-                                            onClick={event => this.handleCategoryPick(event)}
-                                        >
-                                            {category}
-                                        </button>
-                                    )}
-                                </div>
-                                :
-                                <div className='filters'>
-                                    <div className='priceFilter'>
-                                        <div className='priceFilterLabel'>Price:</div>
-                                        <div className='priceFilterContainer'>
-                                            <input
-                                                type='text'
-                                                className='priceLimit'
-                                                onChange={event => this.handleMinPriceChange(event)}
-                                            >
-                                            </input>
-                                            <div className='priceSeparator'>-</div>
-                                            <input
-                                                type='text'
-                                                className='priceLimit'
-                                                onChange={event => this.handleMaxPriceChange(event)}
-                                            >
-                                            </input>
-                                        </div>
-                                    </div>
-                                    <div className='conditionFilter'>
-                                        <div className='conditionFilterLabel'>Condition: </div>
-                                        <label className='conditionOption'>
-                                            <input
-                                                type='radio'
-                                                value='Brand new'
-                                                checked={condition === 'Brand new'}
-                                                onChange={event => this.handleConditionChange(event)}
-                                            />
-                                            Brand new
-                                        </label>
-                                        <label className='conditionOption'>
-                                            <input
-                                                type='radio'
-                                                value='Unpacked'
-                                                checked={condition === 'Unpacked'}
-                                                onChange={event => this.handleConditionChange(event)}
-                                            />
-                                            Unpacked
-                                        </label>
-                                        <label className='conditionOption'>
-                                            <input
-                                                type='radio'
-                                                value='Damaged'
-                                                checked={condition === 'Damaged'}
-                                                onChange={event => this.handleConditionChange(event)}
-                                            />
-                                            Damaged
-                                        </label>
-                                    </div>
+                            <input
+                                type='text'
+                                onChange={event => this.handleSearchbarChange(event)}
+                                className='searchbar'
+                                placeholder='Search'
+                                value={search}
+                            >
+                            </input>
+                            {(role === 'administrator' || role === 'manager') &&
+                                <div className='middle'>
+                                    <button
+                                        className='backToDashboardButton'
+                                        onClick={this.handleGoBackToDashboard}
+                                    >
+                                        Go back to dashboard
+                                    </button>
                                 </div>
                             }
-                            <button
-                                className='button clearFiltersButton'
-                                onClick={this.handleClearFiltersClick}
-                            >
-                                Clear filters
-                            </button>
-                        </div>
-                        <div className='itemsAndNavigationContainer'>
-                            <div className='topPanel'>
-                                <input
-                                    type='text'
-                                    onChange={event => this.handleSearchbarChange(event)}
-                                    className='searchbar'
-                                    placeholder='Search'
-                                    value={search}
+                            <div className='rightside'>
+                                <button
+                                    onClick={this.handleFavouritesClick}
+                                    className='marginLeft button'
                                 >
-                                </input>
-                                <div className='buttonsInTopPanel'>
-                                    <button
-                                        onClick={this.handleFavouritesClick}
-                                        className='marginLeft button'
-                                    >
-                                        Favourites
-                                    </button>
-                                    <button
-                                        onClick={this.handleShoppingCartClick}
-                                        className='marginLeft button'
-                                    >
-                                        Shopping cart
-                                    </button>
-                                    <button
-                                        onClick={this.handleUserInfoClick}
-                                        className='marginLeft button'
-                                    >
-                                        My profile
-                                    </button>
-                                </div>
+                                    Favourites
+                                </button>
+                                <button
+                                    onClick={this.handleShoppingCartClick}
+                                    className='marginLeft button'
+                                >
+                                    Shopping cart
+                                </button>
+                                <button
+                                    onClick={this.handleUserInfoClick}
+                                    className='marginLeft button'
+                                >
+                                    My profile
+                                </button>
+
+                                <Link to="/" className='marginLeft logOutButton'>Log out</Link>
+
+                            </div>
+                        </div>
+
+                        <div className='itemsAndFiltersContainer'>
+                            <div className='leftPanel'>
+                                {showCategories ?
+                                    <div className='categories'>
+                                        {categories.map((category, index) =>
+                                            <button
+                                                key={index}
+                                                className='categoryFilter button'
+                                                onClick={event => this.handleCategoryPick(event)}
+                                            >
+                                                {category}
+                                            </button>
+                                        )}
+                                    </div>
+                                    :
+                                    <div className='filters'>
+                                        <div className='priceFilter'>
+                                            <div className='priceFilterLabel'>Price:</div>
+                                            <div className='priceFilterContainer'>
+                                                <input
+                                                    type='text'
+                                                    className='priceLimit'
+                                                    onChange={event => this.handleMinPriceChange(event)}
+                                                >
+                                                </input>
+                                                <div className='priceSeparator'>-</div>
+                                                <input
+                                                    type='text'
+                                                    className='priceLimit'
+                                                    onChange={event => this.handleMaxPriceChange(event)}
+                                                >
+                                                </input>
+                                            </div>
+                                        </div>
+                                        <div className='conditionFilter'>
+                                            <div className='conditionFilterLabel'>Condition: </div>
+                                            <label className='conditionOption'>
+                                                <input
+                                                    type='radio'
+                                                    value='Brand new'
+                                                    checked={condition === 'Brand new'}
+                                                    onChange={event => this.handleConditionChange(event)}
+                                                />
+                                                Brand new
+                                            </label>
+                                            <label className='conditionOption'>
+                                                <input
+                                                    type='radio'
+                                                    value='Unpacked'
+                                                    checked={condition === 'Unpacked'}
+                                                    onChange={event => this.handleConditionChange(event)}
+                                                />
+                                                Unpacked
+                                            </label>
+                                            <label className='conditionOption'>
+                                                <input
+                                                    type='radio'
+                                                    value='Damaged'
+                                                    checked={condition === 'Damaged'}
+                                                    onChange={event => this.handleConditionChange(event)}
+                                                />
+                                                Damaged
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                                <button
+                                    className='button clearFiltersButton'
+                                    onClick={this.handleClearFiltersClick}
+                                >
+                                    Clear filters
+                                </button>
                             </div>
                             <div className='itemsContainer'>
                                 {fetchedItems.map((item, index) =>
@@ -360,7 +393,6 @@ class ViewItems extends Component {
                                 }
                             </div>
                         </div>
-
                     </div>
                 }
                 {
@@ -370,6 +402,25 @@ class ViewItems extends Component {
                         email={this.state.email}
                         role={this.state.role}
                         showShoppingCart={showShoppingCart}
+                        viewItems={viewItems}
+                    />
+                }
+                {
+                    showDashboard &&
+                    <Home
+                        username={this.state.username}
+                        email={this.state.email}
+                        role={this.state.role}
+                        showDashboard={showDashboard}
+                    />
+                }
+                {
+                    showUserInfo &&
+                    <ShowUserInfo
+                        username={this.state.username}
+                        email={this.state.email}
+                        role={this.state.role}
+                        showUserInfo={showUserInfo}
                         viewItems={viewItems}
                     />
                 }

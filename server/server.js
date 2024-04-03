@@ -187,7 +187,7 @@ app.post('/home/saveItem', async (req, res) => {
 app.post('/home/saveItemsInShoppingCart', async (req, res) => {
     const account = req.body.email;
     const cartItem = req.body.cartItem;
-    
+
     let cartItemArray = [];
     cartItemArray.push(cartItem);
 
@@ -312,6 +312,21 @@ app.post('/home/saveOrder', async (req, res) => {
         res.status(500).json({ error: 'Error while placing order' });
     }
     res.json('The order was successful');
+});
+
+app.get('/home/fetchHistory', async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        const order = await db.collection('orders').find(
+            { 'order.email': email }, { projection: { _id: 0 } }
+        ).toArray();
+        
+        res.json(order);
+    } catch (error) {
+        console.error('Error retrieving order history:', error);
+        res.status(500).json({ error: 'Failed to retrieve order history' });
+    }
 });
 
 app.listen(PORT, () => {

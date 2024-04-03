@@ -1,0 +1,79 @@
+.userInfoDiv {
+    background-color: rgba(182, 182, 182, 0.345);
+}
+
+.innerDiv {
+    display: flex;
+    width: 100%;
+    min-height: 700px;
+
+    padding-left: 10%;
+    padding-top: 10%;
+}
+
+.accountDetails {
+    font-size: 130%;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.goBackButton {
+    background-color: rgba(56, 56, 56, 0.971);
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    border: none;
+    height: 5%;
+    width: 50%;
+    padding: 0.5% 3%;
+    border-radius: 0.7vmax;
+    font-size: 110%;
+    font-family: Arial, sans-serif;
+    margin-left: 10%;
+    margin-top: 20%;
+}
+
+.goBackButton:hover {
+    background-color: rgb(35, 35, 35);
+}
+
+
+.orderDiv {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20%;
+}
+
+
+.orderHistory {
+    font-size: 130%;
+}
+
+.orders {
+    background-color: rgb(194, 194, 194);
+    border-radius: 18px;
+    margin-top:2%;
+}
+
+.orderDate, .orderPrice {
+    margin: 1% 2% 0% 2%;
+    font-size: 120%;
+}
+
+.orderItemsDiv {
+    margin: 1% 2% 0% 2%;
+}
+
+.orderItem {
+    margin-left: 4%;
+    margin-right: 2%;
+}
+
+.noOrders {
+    margin-top: 15%;
+    font-size: 130%;
+    font-style: italic;
+}

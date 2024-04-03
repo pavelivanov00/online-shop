@@ -132,7 +132,7 @@
     font-size: 140%;
     font-family: Arial, sans-serif;
     margin-bottom: 2%;
-}
+}   
 
 .goBackButtonInShoppingCart:hover,
 .incrementButton:hover,
@@ -147,4 +147,9 @@
 
 .colorRed {
     color: rgb(254, 126, 126);
+}
+
+.emptyShoppingCart {
+    font-size: 130%;
+    padding-bottom: 2%;
 }
