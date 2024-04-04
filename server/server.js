@@ -314,15 +314,29 @@ app.post('/home/saveOrder', async (req, res) => {
     res.json('The order was successful');
 });
 
+app.post('/home/clearShoppingCart', async (req, res) => {
+    const email = req.body.email;
+
+    try {
+        await db.collection('shoppingCarts').deleteOne({
+            account: email
+        });
+    } catch (error) {
+        console.error('Error while clearing shopping cart', error);
+        res.status(500).json({ error: 'Error while clearing shopping cart' });
+    }
+    res.json('Shopping cart cleared successfully');
+});
+
 app.get('/home/fetchHistory', async (req, res) => {
     try {
         const { email } = req.query;
 
-        const order = await db.collection('orders').find(
+        const orders = await db.collection('orders').find(
             { 'order.email': email }, { projection: { _id: 0 } }
         ).toArray();
-        
-        res.json(order);
+
+        res.json(orders);
     } catch (error) {
         console.error('Error retrieving order history:', error);
         res.status(500).json({ error: 'Failed to retrieve order history' });

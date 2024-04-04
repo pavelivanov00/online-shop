@@ -6,9 +6,8 @@
     display: flex;
     width: 100%;
     min-height: 700px;
-
     padding-left: 10%;
-    padding-top: 10%;
+    padding-top: 7%;
 }
 
 .accountDetails {
@@ -44,7 +43,7 @@
 .orderDiv {
     display: flex;
     flex-direction: column;
-    margin-left: 20%;
+    margin-left: 12%;
 }
 
 

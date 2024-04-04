@@ -123,10 +123,13 @@ class ShoppingCart extends Component {
             };
         });
 
+        const date = new Date();
+
         const order = {
             email: email,
             shoppingCart: items,
-            finalPrice: finalPrice
+            finalPrice: finalPrice,
+            date: date
         }
 
         try {
@@ -135,6 +138,22 @@ class ShoppingCart extends Component {
             });
             const orderResponse = response.data;
             this.setState({ orderResponse });
+
+            if (orderResponse === 'The order was successful') {
+                try {
+                    const response = await axios.post('http://localhost:5000/home/clearShoppingCart', {
+                        email
+                    });
+                    if (response.data === 'Shopping cart cleared successfully')
+                        this.setState({
+                            shoppingCartDetailed: [],
+                            itemCount: [],
+                            finalPrice: ''
+                        })
+                } catch (error) {
+                    console.error('Error while clearing shopping cart', error);
+                }
+            }
         }
         catch (error) {
             console.error('Error while placing order:', error);
@@ -155,7 +174,12 @@ class ShoppingCart extends Component {
                         </button>
 
                         {shoppingCartDetailed.length === 0 ?
-                            (<div className='emptyShoppingCart'>Your shopping cart is empty</div>)
+                            (orderResponse.length !== 0) ?
+                                <div className={`orderResponse ${orderResponse !== 'The order was successful' ? 'colorRed' : ''}`}>
+                                    {orderResponse}
+                                </div>
+                                :
+                                (<div className='emptyShoppingCart'>Your shopping cart is empty</div>)
                             :
                             (<div className='shoppingCart'>
                                 {shoppingCartDetailed.map((item, index) => (
@@ -210,19 +234,13 @@ class ShoppingCart extends Component {
                             )
                         }
 
-
-
                         <button
                             className='orderButton'
                             onClick={this.handleOrderClick}
                         >
                             Order now
                         </button>
-                        {orderResponse &&
-                            <div className={`orderResponse ${orderResponse !== 'The order was successful' ? 'colorRed' : ''}`}>
-                                {orderResponse}
-                            </div>
-                        }
+
                     </div>
                 }
                 {

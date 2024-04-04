@@ -13,7 +13,7 @@ class ShowUserInfo extends Component {
             role: this.props.role,
             viewItems: this.props.viewItems,
             showUserInfo: this.props.showUserInfo,
-            fetchedOrder: ''
+            fetchedOrders: ''
         }
     }
 
@@ -30,8 +30,8 @@ class ShowUserInfo extends Component {
                     email
                 }
             });
-            this.setState({ fetchedOrder: response.data[0].order });
-            console.log(response.data[0].order)
+            this.setState({ fetchedOrders: response.data });
+            console.log(response.data)
         }
         catch (error) {
             console.error('Error while fetching history:', error);
@@ -52,7 +52,7 @@ class ShowUserInfo extends Component {
     };
 
     render() {
-        const { viewItems, showUserInfo, fetchedOrder } = this.state;
+        const { viewItems, showUserInfo, fetchedOrders } = this.state;
         return (
             <div>
                 {showUserInfo &&
@@ -78,24 +78,22 @@ class ShowUserInfo extends Component {
                                 <div className='orderHistory'>
                                     History of orders:
                                 </div>
-                                {fetchedOrder ?
-                                    <div className='orders'>
-                                        <div className='orderDate'>Date: {this.formatDate(fetchedOrder.date)}</div>
-                                        <div className='orderPrice'>Price: ${fetchedOrder.finalPrice}</div>
-                                        <div className='orderItemsDiv'>Items: </div>
-                                        {fetchedOrder.shoppingCart.map(
-                                            (item, index) => 
-                                            <p
-                                                key={index}
-                                                className='orderItem'
-                                            >
-                                                {item.itemTitle}
-                                            </p>
-                                        )}
-                                    </div>
-                                    :
+                                {fetchedOrders && fetchedOrders.length > 0 ? (
+                                    fetchedOrders.map((order, orderIndex) => (
+                                        <div key={orderIndex} className='orders'>
+                                            <div className='orderDate'>Date: {this.formatDate(order.order.date)}</div>
+                                            <div className='orderPrice'>Price: ${order.order.finalPrice}</div>
+                                            <div className='orderItemsDiv'>Items: </div>
+                                            {order.order.shoppingCart.map((item, itemIndex) => (
+                                                <p key={itemIndex} className='orderItem'>
+                                                    {item.itemTitle}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    ))
+                                ) : (
                                     <p className='noOrders'>No orders made</p>
-                                }
+                                )}
                             </div>
                         </div>
                     </div>
