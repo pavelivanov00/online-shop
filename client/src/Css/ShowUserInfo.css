@@ -25,20 +25,17 @@
     cursor: pointer;
     color: rgb(255, 255, 255);
     border: none;
-    height: 5%;
-    width: 50%;
-    padding: 0.5% 3%;
+    height: 30px;
+    width: 100px;
     border-radius: 0.7vmax;
     font-size: 110%;
     font-family: Arial, sans-serif;
-    margin-left: 10%;
     margin-top: 20%;
 }
 
 .goBackButton:hover {
     background-color: rgb(35, 35, 35);
 }
-
 
 .orderDiv {
     display: flex;
@@ -51,24 +48,46 @@
     font-size: 130%;
 }
 
-.orders {
+.order {
     background-color: rgb(194, 194, 194);
     border-radius: 18px;
-    margin-top:2%;
+    margin-top: 3%;
+    min-width: 350px;
 }
 
-.orderDate, .orderPrice {
-    margin: 1% 2% 0% 2%;
+.orderDate {
+    margin: 1% 4% 0% 4%;
     font-size: 120%;
 }
 
+.orderPrice {
+    margin: 3% 4% 0% 4%;
+    font-size: 120%;
+}
+
+.moreDetailsDiv {
+    margin: 3% 2% 0% 4%;
+}
+
 .orderItemsDiv {
-    margin: 1% 2% 0% 2%;
+    margin: 3% 4% 0% 4%;
 }
 
 .orderItem {
-    margin-left: 4%;
+    margin-left: 6%;
     margin-right: 2%;
+}
+
+.moreDetails {
+    /* margin: 1% 2% 2% 1%; */
+    margin-bottom: 2%;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .noOrders {

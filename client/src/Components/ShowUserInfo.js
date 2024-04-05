@@ -13,7 +13,8 @@ class ShowUserInfo extends Component {
             role: this.props.role,
             viewItems: this.props.viewItems,
             showUserInfo: this.props.showUserInfo,
-            fetchedOrders: ''
+            fetchedOrders: '',
+            showMoreDetails: []
         }
     }
 
@@ -51,8 +52,16 @@ class ShowUserInfo extends Component {
         })
     };
 
+    handleShowMoreDetails = index => {
+        const { showMoreDetails, fetchedOrders } = this.state;
+        const updatedArray = [...showMoreDetails];
+        updatedArray[index] = true;
+        if (updatedArray[index] > fetchedOrders.length) throw new Error('Invalid data.');
+        else this.setState({ showMoreDetails: updatedArray });
+    }
+
     render() {
-        const { viewItems, showUserInfo, fetchedOrders } = this.state;
+        const { viewItems, showUserInfo, fetchedOrders, showMoreDetails } = this.state;
         return (
             <div>
                 {showUserInfo &&
@@ -70,7 +79,6 @@ class ShowUserInfo extends Component {
                                     className='goBackButton'
                                     onClick={this.handleGoBackClick}
                                 >
-
                                     Go back
                                 </button>
                             </div>
@@ -79,16 +87,31 @@ class ShowUserInfo extends Component {
                                     History of orders:
                                 </div>
                                 {fetchedOrders && fetchedOrders.length > 0 ? (
-                                    fetchedOrders.map((order, orderIndex) => (
-                                        <div key={orderIndex} className='orders'>
-                                            <div className='orderDate'>Date: {this.formatDate(order.order.date)}</div>
-                                            <div className='orderPrice'>Price: ${order.order.finalPrice}</div>
-                                            <div className='orderItemsDiv'>Items: </div>
-                                            {order.order.shoppingCart.map((item, itemIndex) => (
-                                                <p key={itemIndex} className='orderItem'>
-                                                    {item.itemTitle}
-                                                </p>
-                                            ))}
+                                    fetchedOrders.map((element, orderIndex) => (
+                                        <div key={orderIndex} className='order'>
+                                            <div className='orderDate'>Date: {this.formatDate(element.order.date)}</div>
+                                            <div className='orderPrice'>Price: ${element.order.finalPrice}</div>
+                                            {showMoreDetails[orderIndex] ? (
+                                                <div>
+                                                    <div className='orderItemsDiv'>Items:</div>
+                                                    <div>
+                                                        {element.order.shoppingCart.map((item, itemIndex) => (
+                                                            <p key={itemIndex} className='orderItem'>
+                                                                {item.itemTitle}
+                                                            </p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className='moreDetailsDiv'>
+                                                    <button
+                                                        className='moreDetails'
+                                                        onClick={() => this.handleShowMoreDetails(orderIndex)}
+                                                    >
+                                                        Show more details
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     ))
                                 ) : (
@@ -108,7 +131,7 @@ class ShowUserInfo extends Component {
                         viewItems={viewItems}
                     />
                 }
-            </div>
+            </div >
         )
     }
 }
