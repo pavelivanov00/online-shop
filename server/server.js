@@ -5,8 +5,13 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT;
-const MONGO_URI = process.env.MONGO_URI;
+const PORT = process.env.PORT || 5000;
+
+//URI за локално инсталирана база данни MongoDB
+const localMongoDBURI = 'mongodb://0.0.0.0:27017/online-shop';
+
+//URI за MongoDB инсталиран в контейнер на Docker
+const dockerContainerURI = 'mongodb://local-mongo:27017/online-shop';
 
 app.use(cors());
 
@@ -16,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 var db;
 
-MongoClient.connect(MONGO_URI)
+MongoClient.connect(localMongoDBURI)
     .then((client) => {
         console.log('Connected to MongoDB');
         db = client.db('online-shop');
@@ -336,7 +341,16 @@ app.get('/home/fetchHistory', async (req, res) => {
             { 'order.email': email }, { projection: { _id: 0 } }
         ).toArray();
 
-        res.json(orders);
+        const registerDate = await db.collection('accounts').find(
+            { 'account.email': email }, 
+            { projection: { 'account.registerDate': 1, _id: 0 } } 
+        ).toArray();
+
+        const result = {
+            orders,
+            'registerDate': registerDate[0].account.registerDate
+        }
+        res.json(result);
     } catch (error) {
         console.error('Error retrieving order history:', error);
         res.status(500).json({ error: 'Failed to retrieve order history' });

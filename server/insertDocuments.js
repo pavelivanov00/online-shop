@@ -389,7 +389,7 @@ async function insertDocuments() {
     try {
         await client.connect();
 
-        const database = client.db('onlineShopTest');
+        const database = client.db('online-shop');
 
         const accountsCollection = database.collection('accounts');
         await accountsCollection.insertMany(accountsData);

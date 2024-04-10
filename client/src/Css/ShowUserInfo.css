@@ -20,6 +20,9 @@
     align-items: center;
 }
 
+.accountInfoLine {
+    margin-bottom: 5%;
+}
 .goBackButton {
     background-color: rgba(56, 56, 56, 0.971);
     cursor: pointer;

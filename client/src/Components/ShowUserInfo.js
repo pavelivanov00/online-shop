@@ -11,10 +11,11 @@ class ShowUserInfo extends Component {
             username: this.props.username,
             email: this.props.email,
             role: this.props.role,
+            accountRegisterDate: '',
             viewItems: this.props.viewItems,
             showUserInfo: this.props.showUserInfo,
             fetchedOrders: '',
-            showMoreDetails: []
+            showMoreDetails: [],
         }
     }
 
@@ -31,7 +32,10 @@ class ShowUserInfo extends Component {
                     email
                 }
             });
-            this.setState({ fetchedOrders: response.data });
+            this.setState({
+                fetchedOrders: response.data.orders,
+                accountRegisterDate: response.data.registerDate
+            });
             console.log(response.data)
         }
         catch (error) {
@@ -69,11 +73,18 @@ class ShowUserInfo extends Component {
                         <div className='innerDiv'>
                             <div className='flexColumn'>
                                 <div className='accountDetails'>
-                                    username: {this.state.username}
-                                    <br />
-                                    email: {this.state.email}
-                                    <br />
-                                    role: {this.state.role}
+                                    <div className='accountInfoLine'>
+                                        username: {this.state.username}
+                                    </div>
+                                    <div className='accountInfoLine'>
+                                        email: {this.state.email}
+                                    </div>
+                                    <div className='accountInfoLine'>
+                                        role: {this.state.role}
+                                    </div>
+                                    <div className='accountInfoLine'>
+                                        register date: {this.formatDate(this.state.accountRegisterDate)}
+                                    </div>
                                 </div>
                                 <button
                                     className='goBackButton'
