@@ -27,5 +27,4 @@ client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 
-client/Dockerfileeeeee.client
-
+client/Dockerfile.client
