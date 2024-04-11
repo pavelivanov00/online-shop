@@ -202,20 +202,14 @@ app.post('/home/saveItemsInShoppingCart', async (req, res) => {
         });
 
         const existingCartItem = await db.collection('shoppingCarts').findOne({
+            account: account,
             shoppingCart: { $elemMatch: { title: cartItem.title } }
         });
 
         if (existingAccount) {
             if (existingCartItem) await db.collection('shoppingCarts').updateOne(
-                {
-                    $and: [
-                        { account },
-                        { shoppingCart: { $elemMatch: { title: cartItem.title } } }
-                    ]
-                },
-                {
-                    $inc: { 'shoppingCart.$.count': 1 }
-                }
+                { account },
+                { $inc: { 'shoppingCart.$.count': 1 } }
             );
             else
                 await db.collection('shoppingCarts').updateOne(
@@ -342,8 +336,8 @@ app.get('/home/fetchHistory', async (req, res) => {
         ).toArray();
 
         const registerDate = await db.collection('accounts').find(
-            { 'account.email': email }, 
-            { projection: { 'account.registerDate': 1, _id: 0 } } 
+            { 'account.email': email },
+            { projection: { 'account.registerDate': 1, _id: 0 } }
         ).toArray();
 
         const result = {

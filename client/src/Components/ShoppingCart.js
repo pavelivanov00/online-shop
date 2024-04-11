@@ -8,7 +8,9 @@ class ShoppingCart extends Component {
         super(props)
 
         this.state = {
+            username: this.props.username,
             email: this.props.email,
+            role: this.props.role,
             viewItems: this.props.viewItems,
             showShoppingCart: this.props.showShoppingCart,
             shoppingCartDetailed: [],
@@ -230,6 +232,9 @@ class ShoppingCart extends Component {
                                 )
                                 )
                                 }
+                                <div className='finalPrice'>
+                                    Final price: ${finalPrice}
+                                </div>
                             </div>
                             )
                         }
