@@ -24,12 +24,12 @@
 Можете да се впишете със следните данни
 Администратор: 
 email: admin@example.com
-парола: sf2kasd@i2dd2
+парола: Example123password@@
 
 Мениджър:
 email: manager@example.com
-парола: sf2kasd@i2dd2
+парола: Example123password@@
 
 Клиент:
 email: customer@example.com
-парола: sf2kasd@i2dd2
+парола: Example123password@@

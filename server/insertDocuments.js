@@ -13,8 +13,9 @@ const accountsData = [
         {
             username: 'Example Admin',
             email: 'admin@example.com',
-            hashedPassword: '$2b$10$1HlT5WNceXMFJ902KdD71exWNLi.fhDap3ESKVlZnjhJf4fOCnsRq',
-            role: 'administrator'
+            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            role: 'administrator',
+            date: date
         }
     },
 
@@ -23,16 +24,18 @@ const accountsData = [
         {
             username: 'Example Manager',
             email: 'manager@example.com',
-            hashedPassword: '$2b$10$1HlT5WNceXMFJ902KdD71exWNLi.fhDap3ESKVlZnjhJf4fOCnsRq',
-            role: 'manager'
+            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            role: 'manager',
+            date: date
         }
     },
     {
         account: {
             username: 'Example Customer',
-            email: 'customer@manager.com',
-            hashedPassword: '$2b$10$1HlT5WNceXMFJ902KdD71exWNLi.fhDap3ESKVlZnjhJf4fOCnsRq',
-            role: 'customer'
+            email: 'customer@example.com',
+            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            role: 'customer',
+            date: date
         }
     }
 ];
