@@ -1,12 +1,13 @@
 const { MongoClient } = require('mongodb');
 
 //URI за локално инсталирана база данни MongoDB
-const localMongoDBURI = 'mongodb://0.0.0.0:27017/online-shop'; 
+const localMongoDBURI = 'mongodb://0.0.0.0:27017/online-shop';
 
 //URI за MongoDB инсталиран в контейнер на Docker
-const dockerContainerURI = 'mongodb://local-mongo:27017/online-shop'; 
+const dockerContainerURI = 'mongodb://local-mongo:27017/online-shop';
 
 const date = new Date();
+
 const accountsData = [
     {
         account:
@@ -15,7 +16,7 @@ const accountsData = [
             email: 'admin@example.com',
             hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
             role: 'administrator',
-            date: date
+            registerDate: date
         }
     },
 
@@ -26,7 +27,7 @@ const accountsData = [
             email: 'manager@example.com',
             hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
             role: 'manager',
-            date: date
+            registerDate: date
         }
     },
     {
@@ -35,7 +36,7 @@ const accountsData = [
             email: 'customer@example.com',
             hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
             role: 'customer',
-            date: date
+            registerDate: date
         }
     }
 ];
@@ -242,36 +243,36 @@ const itemsData = [
 const ordersData = [
     {
         "order": {
-            "email": "admin@admin.com",
+            "email": "admin@example.com",
             "shoppingCart": [
                 {
                     "itemCount": 1,
-                    "itemTitle": "Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
+                    "itemTitle": "EXAMPLE Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
                     "price": 30
                 },
                 {
                     "itemCount": 2,
-                    "itemTitle": "Garnier Fructis Pure Clean Purifying Shampoo, Silicone-Free, 12.5 Fl Oz, 3 Count",
+                    "itemTitle": "EXAMPLE Garnier Fructis Pure Clean Purifying Shampoo, Silicone-Free, 12.5 Fl Oz, 3 Count",
                     "price": 26
                 },
                 {
                     "itemCount": 2,
-                    "itemTitle": "Fuwidvia 3 Pack Airplane Launcher Toys, 13.2'' LED Foam Glider Catapult Plane Toy for Boys",
+                    "itemTitle": "EXAMPLE Fuwidvia 3 Pack Airplane Launcher Toys, 13.2'' LED Foam Glider Catapult Plane Toy for Boys",
                     "price": 50
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
+                    "itemTitle": "EXAMPLE Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
                     "price": 20
                 },
                 {
                     "itemCount": 3,
-                    "itemTitle": "Car Toy",
+                    "itemTitle": "EXAMPLE Car Toy",
                     "price": 15
                 },
                 {
                     "itemCount": 2,
-                    "itemTitle": "Teddy Bear",
+                    "itemTitle": "EXAMPLE Teddy Bear",
                     "price": 50
                 }
             ],
@@ -281,26 +282,26 @@ const ordersData = [
     },
     {
         "order": {
-            "email": "admin@admin.com",
+            "email": "admin@example.com",
             "shoppingCart": [
                 {
                     "itemCount": 4,
-                    "itemTitle": "Fuwidvia 3 Pack Airplane Launcher Toys, 13.2'' LED Foam Glider Catapult Plane Toy for Boys",
+                    "itemTitle": "EXAMPLE Fuwidvia 3 Pack Airplane Launcher Toys, 13.2'' LED Foam Glider Catapult Plane Toy for Boys",
                     "price": 100
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
+                    "itemTitle": "EXAMPLE Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
                     "price": 20
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "SAMSUNG 32-inch Class LED Smart FHD TV 720P (UN32M4500BFXZA)",
+                    "itemTitle": "EXAMPLE SAMSUNG 32-inch Class LED Smart FHD TV 720P (UN32M4500BFXZA)",
                     "price": 200
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
+                    "itemTitle": "EXAMPLE Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
                     "price": 30
                 }
             ],
@@ -310,21 +311,21 @@ const ordersData = [
     },
     {
         "order": {
-            "email": "admin@admin.com",
+            "email": "admin@example.com",
             "shoppingCart": [
                 {
                     "itemCount": 2,
-                    "itemTitle": "Meguiar's G7014J Gold Class Carnauba Plus Premium Paste Wax",
+                    "itemTitle": "EXAMPLE Meguiar's G7014J Gold Class Carnauba Plus Premium Paste Wax",
                     "price": 30
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "LIQUI MOLY Top Tec 4600 SAE 5W-30 | 5 L | Synthesis technology motor oil | SKU: 20448",
+                    "itemTitle": "EXAMPLE LIQUI MOLY Top Tec 4600 SAE 5W-30 | 5 L | Synthesis technology motor oil | SKU: 20448",
                     "price": 65
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "Car Jack Kit Scissor Jack for Car 2 Ton (4409 lbs) Tire Jack Tool Kit Universal Car Emergency Ki",
+                    "itemTitle": "EXAMPLE Car Jack Kit Scissor Jack for Car 2 Ton (4409 lbs) Tire Jack Tool Kit Universal Car Emergency Ki",
                     "price": 50
                 }
             ],
@@ -334,16 +335,16 @@ const ordersData = [
     },
     {
         "order": {
-            "email": "admin@admin.com",
+            "email": "admin@example.com",
             "shoppingCart": [
                 {
                     "itemCount": 1,
-                    "itemTitle": "To Kill a Mockingbird",
+                    "itemTitle": "EXAMPLE To Kill a Mockingbird",
                     "price": 25
                 },
                 {
                     "itemCount": 1,
-                    "itemTitle": "Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
+                    "itemTitle": "EXAMPLE Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
                     "price": 20
                 }
             ],
@@ -353,15 +354,91 @@ const ordersData = [
     },
     {
         "order": {
-            "email": "admin@admin.com",
+            "email": "admin@example.com",
             "shoppingCart": [
                 {
                     "itemCount": 1,
-                    "itemTitle": "Gaiam Yoga Mat - Premium 6mm Print Extra Thick Non Slip Exercise & Fitness Mat for All Types of Yoga",
+                    "itemTitle": "EXAMPLE Gaiam Yoga Mat - Premium 6mm Print Extra Thick Non Slip Exercise & Fitness Mat for All Types of Yoga",
                     "price": 30
                 }
             ],
             "finalPrice": 30,
+            "date": date
+        }
+    },
+    {
+        "order": {
+            "email": "manager@example.com",
+            "shoppingCart": [
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
+                    "price": 30
+                },
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Flexon FR1225CN Light Duty Garden Hose, 25ft, Green",
+                    "price": 30
+                }
+            ],
+            "finalPrice": 60,
+            "date": date
+        }
+    },
+    {
+        "order": {
+            "email": "manager@example.com",
+            "shoppingCart": [
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE To Kill a Mockingbird",
+                    "price": 25
+                },
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Harry Potter and the Order of the Phoenix: The Illustrated Edition (Harry Potter, Book 5)",
+                    "price": 20
+                }
+            ],
+            "finalPrice": 45,
+            "date": date
+        }
+    },
+    {
+        "order": {
+            "email": "customer@example.com",
+            "shoppingCart": [
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Coleman Sundome Camping Tent, 2/3/4/6 Person Dome Tent with Easy Setup in Under 10 Mins",
+                    "price": 70
+                },
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Outward Hound Fun Feeder Slo Bowl, Slow Feeder Dog Bowl, Medium/Mini, Turquoise",
+                    "price": 9
+                }
+            ],
+            "finalPrice": 79,
+            "date": date
+        }
+    },
+    {
+        "order": {
+            "email": "customer@example.com",
+            "shoppingCart": [
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE Orthopedic Sofa Dog Bed - Ultra Comfortable Dog Beds for Medium Dogs",
+                    "price": 50
+                },
+                {
+                    "itemCount": 1,
+                    "itemTitle": "EXAMPLE SAMSUNG 32-inch Class LED Smart FHD TV 720P (UN32M4500BFXZA)",
+                    "price": 200
+                }
+            ],
+            "finalPrice": 250,
             "date": date
         }
     }
@@ -377,6 +454,52 @@ const shoppingCartsData = [
             },
             {
                 "title": "SAMSUNG 32-Inch Class QLED 4K Q60C Series Quantum HDR, Dual LED",
+                "count": 1
+            },
+            {
+                "title": "Flexon FR1225CN Light Duty Garden Hose, 25ft, Green",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "account": "manager@example.com",
+        "shoppingCart": [
+            {
+                "title": "Outward Hound Fun Feeder Slo Bowl, Slow Feeder Dog Bowl, Medium/Mini, Turquoise",
+                "count": 1
+            },
+            {
+                "title": "Fuwidvia 3 Pack Airplane Launcher Toys, 13.2'' LED Foam Glider Catapult Plane Toy for Boys",
+                "count": 1
+            },
+            {
+                "title": "Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
+                "count": 1
+            },
+            {
+                "title": "To Kill a Mockingbird",
+                "count": 1
+            },
+            {
+                "title": "Flexon FR1225CN Light Duty Garden Hose, 25ft, Green",
+                "count": 1
+            }
+        ]
+    },
+    {
+        "account": "customer@example.com",
+        "shoppingCart": [
+            {
+                "title": "Corona BP 3180D Forged Classic Bypass Pruner with 1 Inch Cutting Capacity, 1\", Red",
+                "count": 1
+            },
+            {
+                "title": "Car Jack Kit Scissor Jack for Car 2 Ton (4409 lbs) Tire Jack Tool Kit Universal Car Emergency Ki",
+                "count": 1
+            },
+            {
+                "title": "LIQUI MOLY Top Tec 4600 SAE 5W-30 | 5 L | Synthesis technology motor oil | SKU: 20448",
                 "count": 1
             },
             {
