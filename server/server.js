@@ -197,14 +197,12 @@ app.post('/home/saveItemsInShoppingCart', async (req, res) => {
     cartItemArray.push(cartItem);
 
     try {
-        const existingCart = await db.collection('shoppingCarts').findOne({ account });
+        const accountCart = await db.collection('shoppingCarts').findOne({ account });
 
-        if (existingCart) {
-            // Account exists, check if item exists in the shopping cart
-            const matchedItem = existingCart.shoppingCart.find(item => item.title === cartItem.title);
+        if (accountCart) {
+            const matchedItem = accountCart.shoppingCart.find(item => item.title === cartItem.title);
 
             if (matchedItem) {
-                // Item exists in the shopping cart, update its count
                 await db.collection('shoppingCarts').updateOne(
                     {
                         account,
@@ -215,14 +213,12 @@ app.post('/home/saveItemsInShoppingCart', async (req, res) => {
                     }
                 );
             } else {
-                // Item not found in the shopping cart, add it
                 await db.collection('shoppingCarts').updateOne(
                     { account },
                     { $push: { shoppingCart: { $each: cartItemArray } } }
                 );
             }
         } else {
-            // Account does not exist, create a new shopping cart document
             await db.collection('shoppingCarts').insertOne({
                 account,
                 shoppingCart: cartItemArray
