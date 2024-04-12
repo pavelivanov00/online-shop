@@ -197,30 +197,37 @@ app.post('/home/saveItemsInShoppingCart', async (req, res) => {
     cartItemArray.push(cartItem);
 
     try {
-        const existingAccount = await db.collection('shoppingCarts').findOne({
-            account
-        });
+        const existingCart = await db.collection('shoppingCarts').findOne({ account });
 
-        const existingCartItem = await db.collection('shoppingCarts').findOne({
-            account: account,
-            shoppingCart: { $elemMatch: { title: cartItem.title } }
-        });
+        if (existingCart) {
+            // Account exists, check if item exists in the shopping cart
+            const matchedItem = existingCart.shoppingCart.find(item => item.title === cartItem.title);
 
-        if (existingAccount) {
-            if (existingCartItem) await db.collection('shoppingCarts').updateOne(
-                { account },
-                { $inc: { 'shoppingCart.$.count': 1 } }
-            );
-            else
+            if (matchedItem) {
+                // Item exists in the shopping cart, update its count
+                await db.collection('shoppingCarts').updateOne(
+                    {
+                        account,
+                        'shoppingCart.title': cartItem.title
+                    },
+                    {
+                        $inc: { 'shoppingCart.$.count': 1 }
+                    }
+                );
+            } else {
+                // Item not found in the shopping cart, add it
                 await db.collection('shoppingCarts').updateOne(
                     { account },
                     { $push: { shoppingCart: { $each: cartItemArray } } }
                 );
-        } else
+            }
+        } else {
+            // Account does not exist, create a new shopping cart document
             await db.collection('shoppingCarts').insertOne({
                 account,
                 shoppingCart: cartItemArray
             });
+        }
     } catch (error) {
         console.error('Error updating shopping cart', error);
         res.status(500).json({ error: 'Error updating shopping cart' });

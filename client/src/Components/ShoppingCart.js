@@ -238,7 +238,6 @@ class ShoppingCart extends Component {
                             </div>
                             )
                         }
-
                         <button
                             className='orderButton'
                             onClick={this.handleOrderClick}

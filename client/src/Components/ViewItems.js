@@ -189,7 +189,10 @@ class ViewItems extends Component {
     };
 
     handleAddToCartButtonClick = async (item) => {
-        const cartItem = { title: item.item.title, count: 1 };
+        const cartItem = { 
+            title: item.item.title, 
+            count: 1 
+        };
 
         try {
             await axios.post('http://localhost:5000/home/saveItemsInShoppingCart', {
