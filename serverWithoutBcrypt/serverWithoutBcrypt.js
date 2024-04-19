@@ -1,14 +1,12 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
-require('dotenv').config();
 
 const app = express();
 const PORT = 5000;
 
-//URI за локално инсталирана база данни MongoDB
-const localMongoDBURI = 'mongodb://0.0.0.0:27017/online-shop';
+//URI за MongoDB инсталиран в контейнер на Docker
+const dockerContainerURI = 'mongodb://local-mongo:27017/online-shop';
 
 app.use(cors());
 
@@ -18,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 var db;
 
-MongoClient.connect(localMongoDBURI)
+MongoClient.connect(dockerContainerURI)
     .then((client) => {
         console.log('Connected to MongoDB');
         db = client.db('online-shop');
@@ -27,16 +25,7 @@ MongoClient.connect(localMongoDBURI)
 
 app.post('/register', async (req, res) => {
     const { username, email, password, role } = req.body;
-
-    const saltRounds = 10;
     try {
-        const hashedPassword = await new Promise((resolve, reject) => {
-            bcrypt.hash(password, saltRounds, (err, hash) => {
-                if (err) reject(err);
-                else resolve(hash);
-            });
-        });
-
         const existingEmail = await db.collection('accounts').findOne({
             ['account.email']: email
         });
@@ -49,7 +38,7 @@ app.post('/register', async (req, res) => {
             const account = {
                 username,
                 email,
-                hashedPassword,
+                password,
                 role,
                 registerDate
             };
@@ -72,26 +61,18 @@ app.post('/login', async (req, res) => {
             ['account.email']: email
         });
 
-        if (!query) {
-            return res.json('Invalid credentials');
-        }
-        bcrypt.compare(password, query.account.hashedPassword, (err, result) => {
-            if (err) {
-                console.error('Error comparing passwords:', err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
+        if (!query) return res.json('Invalid credentials');
 
-            if (result) {
-                return res.json({
-                    status: 'Login successful',
-                    username: query.account.username,
-                    email: query.account.email,
-                    role: query.account.role
-                });
-            } else {
-                return res.json('Invalid credentials');
-            }
-        });
+        else if (query.account.password !== password) return res.json('Invalid credentials');
+
+        else {
+            return res.json({
+                status: 'Login successful',
+                username: query.account.username,
+                email: query.account.email,
+                role: query.account.role
+            });
+        }
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal server error' });

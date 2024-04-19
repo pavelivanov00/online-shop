@@ -1,8 +1,5 @@
 const { MongoClient } = require('mongodb');
 
-//URI за локално инсталирана база данни MongoDB
-const localMongoDBURI = 'mongodb://0.0.0.0:27017/online-shop';
-
 //URI за MongoDB инсталиран в контейнер на Docker
 const dockerContainerURI = 'mongodb://local-mongo:27017/online-shop';
 
@@ -14,7 +11,7 @@ const accountsData = [
         {
             username: 'Example Admin',
             email: 'admin@example.com',
-            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            password: 'Example123password@@',
             role: 'administrator',
             registerDate: date
         }
@@ -25,7 +22,7 @@ const accountsData = [
         {
             username: 'Example Manager',
             email: 'manager@example.com',
-            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            password: 'Example123password@@',
             role: 'manager',
             registerDate: date
         }
@@ -34,7 +31,7 @@ const accountsData = [
         account: {
             username: 'Example Customer',
             email: 'customer@example.com',
-            hashedPassword: '$2b$10$godL/pGsR3.lWk8XRPeVteAE2c5xb8IEX7rRVGoksT17qSJcYgiAO',
+            password: 'Example123password@@',
             role: 'customer',
             registerDate: date
         }
@@ -510,7 +507,7 @@ const shoppingCartsData = [
     }
 ]
 async function insertDocuments() {
-    const client = new MongoClient(localMongoDBURI);
+    const client = new MongoClient(dockerContainerURI);
 
     try {
         await client.connect();

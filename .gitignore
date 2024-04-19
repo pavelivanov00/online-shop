@@ -1,8 +1,5 @@
-docker-compose.yml
-
 server/node_modules
 server/.env
-server/Dockerfile.server
 
 
 # dependencies
@@ -26,5 +23,3 @@ client/.env.production.local
 client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
-
-client/Dockerfile.client

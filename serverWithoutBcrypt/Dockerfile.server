@@ -1,0 +1,10 @@
+FROM node:latest
+WORKDIR /app
+COPY package*.json ./
+COPY insertDocuments.js ./
+COPY serverWithoutBcrypt.js ./
+RUN npm install
+CMD ["node", "insertDocuments.js"]
+COPY . .
+EXPOSE 5000
+CMD ["node", "serverWithoutBcrypt.js"]

@@ -36,7 +36,6 @@ class ShowUserInfo extends Component {
                 fetchedOrders: response.data.orders,
                 accountRegisterDate: response.data.registerDate
             });
-            console.log(response.data)
         }
         catch (error) {
             console.error('Error while fetching history:', error);

@@ -273,12 +273,12 @@ class ViewItems extends Component {
                                 </div>
                             }
                             <div className='rightside'>
-                                <button
+                                {/* <button
                                     onClick={this.handleFavouritesClick}
                                     className='marginLeft button'
                                 >
                                     Favourites
-                                </button>
+                                </button> */}
                                 <button
                                     onClick={this.handleShoppingCartClick}
                                     className='marginLeft button'
