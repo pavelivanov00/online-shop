@@ -17,6 +17,20 @@
 3) Изпълнете командата docker compose up --build
 4) Отворете web браузър и заредете адрес localhost:3000 за да проверите работата на приложението
 
+Можете да се впишете със следните данни:
+
+Администратор: 
+email: admin@example.com
+парола: Example123password@@
+
+Мениджър:
+email: manager@example.com
+парола: Example123password@@
+
+Клиент:
+email: customer@example.com
+парола: Example123password@@
+
 Стъпки за тестване със софтуера от вариант 2:
 
 1) Отворете команден прозорец и изтеглете проекта от GitHub хранилището чрез командата git clone https://github.com/pavelivanov00/online-shop.git 
