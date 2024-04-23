@@ -6,6 +6,6 @@ COPY . .
 EXPOSE 5000
 COPY insertDocuments.js .
 COPY serverWithoutBcrypt.js .
-COPY startScript.sh .
-RUN chmod +x ./startScript.sh
-CMD ["./startScript.sh"]
+COPY server.sh .
+RUN chmod +x ./server.sh
+CMD ["./server.sh"]
